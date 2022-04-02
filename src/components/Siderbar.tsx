@@ -7,6 +7,7 @@ import {
   MdOutlineDashboard,
   MdLogout,
 } from "react-icons/md";
+import { NavLink } from "react-router-dom";
 
 import {
   Box,
@@ -16,7 +17,6 @@ import {
   Icon,
   useColorModeValue,
   useDisclosure,
-  Link,
 } from "@chakra-ui/react";
 
 interface LinkItemProps {
@@ -90,12 +90,13 @@ interface NavItemProps extends FlexProps {
   href: string;
 }
 const NavItem = ({ icon, children, href, ...rest }: NavItemProps) => {
+  function isNavItemSelected({ isActive }: { isActive: boolean }): string {
+    if (isActive) return "active";
+    return "";
+  }
+
   return (
-    <Link
-      href={href}
-      style={{ textDecoration: "none" }}
-      _focus={{ boxShadow: "none" }}
-    >
+    <NavLink to={href} className={isNavItemSelected}>
       <Flex
         align="center"
         px="4"
@@ -122,6 +123,6 @@ const NavItem = ({ icon, children, href, ...rest }: NavItemProps) => {
         )}
         {children}
       </Flex>
-    </Link>
+    </NavLink>
   );
 };
