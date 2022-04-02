@@ -1,38 +1,27 @@
-import * as React from "react"
-import {
-  ChakraProvider,
-  Box,
-  Text,
-  Link,
-  VStack,
-  Code,
-  Grid,
-  theme,
-} from "@chakra-ui/react"
-import { ColorModeSwitcher } from "./ColorModeSwitcher"
-import { Logo } from "./Logo"
+import React from "react";
+
+import { Box, ChakraProvider, theme } from "@chakra-ui/react";
+
+import Header from "./components/Header";
+import SimpleSidebar from "./components/Siderbar";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Article from "./pages/Article";
+import Category from "./pages/Category";
+import Login from "./pages/Login";
 
 export const App = () => (
-  <ChakraProvider theme={theme}>
-    <Box textAlign="center" fontSize="xl">
-      <Grid minH="100vh" p={3}>
-        <ColorModeSwitcher justifySelf="flex-end" />
-        <VStack spacing={8}>
-          <Logo h="40vmin" pointerEvents="none" />
-          <Text>
-            Edit <Code fontSize="xl">src/App.tsx</Code> and save to reload.
-          </Text>
-          <Link
-            color="teal.500"
-            href="https://chakra-ui.com"
-            fontSize="2xl"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn Chakra
-          </Link>
-        </VStack>
-      </Grid>
-    </Box>
-  </ChakraProvider>
-)
+  <BrowserRouter>
+    <ChakraProvider theme={theme}>
+      <Routes>
+        <Header />
+        <Box textAlign="center" fontSize="xl">
+          <SimpleSidebar>
+            <Route path="/article" element={<Article />} />
+            <Route path="/category" element={<Category />} />
+            <Route path="/login" element={<Login />} />
+          </SimpleSidebar>
+        </Box>
+      </Routes>
+    </ChakraProvider>
+  </BrowserRouter>
+);
