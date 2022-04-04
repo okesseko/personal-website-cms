@@ -5,11 +5,13 @@ import {
   TableContainer,
   Tbody,
   Td,
+  TableCellProps,
   Tfoot,
   Th,
   Thead,
   Image,
   Tr,
+  Text,
 } from "@chakra-ui/react";
 import dayjs from "dayjs";
 
@@ -17,6 +19,7 @@ interface TableHeaderProps {
   type: "string" | "number" | "time" | "image";
   title: string;
   key: string;
+  style?: TableCellProps;
 }
 
 interface TableDataProps {
@@ -36,31 +39,35 @@ const Table = ({ tableData, tableHeader }: TableProps) => {
           const type = headerData.type;
           const key = headerData.key;
           const value = data[key];
-
+          let content;
           switch (type) {
             case "string":
-              return <Td key={key}>{value}</Td>;
+              content = value;
+              break
             case "number":
-              return (
-                <Td isNumeric key={key}>
-                  {new Intl.NumberFormat("en").format(value as number)}
-                </Td>
-              );
+              content = new Intl.NumberFormat("en").format(value as number);
+              break
             case "time":
-              return <Td key={key}>{dayjs(value).format("YYYY-MM-DD")}</Td>;
+              content = dayjs(value).format("YYYY-MM-DD")
+              break
             case "image":
-              return (
-                <Td key={key}>
-                  <Image
-                    boxSize="100px"
-                    objectFit="cover"
-                    src={value as string}
-                  />
-                </Td>
-              );
+              content =
+                <Image
+                  boxSize="60px"
+                  objectFit="cover"
+                  m="auto"
+                  borderRadius="8px"
+                  src={value as string}
+                />
+              break
             default:
-              <Td key={key}>{value}</Td>;
+              content = '';
           }
+          return <Td
+            key={key}
+            isNumeric={type === "number"}
+            {...(headerData.style||{})}
+          ><Text noOfLines={2}>{content}</Text></Td>;
         })}
       </Tr>
     ));
@@ -69,9 +76,6 @@ const Table = ({ tableData, tableHeader }: TableProps) => {
   return (
     <TableContainer>
       <TableChakra variant="simple" colorScheme="telegram">
-        <TableCaption placement="top">
-          Imperial to metric conversion factors
-        </TableCaption>
         <Thead>
           <Tr>
             {tableHeader.map(({ type, key, title }) => (
@@ -83,23 +87,6 @@ const Table = ({ tableData, tableHeader }: TableProps) => {
         </Thead>
         <Tbody>
           {mappingTableData()}
-          {/* <Tr>
-            <Td>inches</Td>
-            <Td style={{ width: "10px" }}>
-              millimetres (mm)asdadasdasdasdasdasdasdas
-            </Td>
-            <Td isNumeric>25.4</Td>
-          </Tr>
-          <Tr>
-            <Td>feet</Td>
-            <Td>centimetres (cm)</Td>
-            <Td isNumeric>30.48</Td>
-          </Tr>
-          <Tr>
-            <Td>yards</Td>
-            <Td>metres (m)</Td>
-            <Td isNumeric>0.91444</Td>
-          </Tr> */}
         </Tbody>
         <Tfoot>
           <Tr>
