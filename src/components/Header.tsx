@@ -3,6 +3,7 @@ import React from 'react';
 import { Avatar, Box, Flex, Stack, useColorModeValue } from '@chakra-ui/react';
 
 import { ColorModeSwitcher } from './ColorModeSwitcher';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   return (
@@ -15,7 +16,9 @@ const Header = () => {
       borderBottomColor={useColorModeValue("gray.200", "gray.700")}
     >
       <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
-        <Box>Logo</Box>
+        <Box>
+          <Link to="/">Logo</Link>
+        </Box>
         <ColorModeSwitcher justifySelf="flex-end" />
       </Flex>
     </Box>
