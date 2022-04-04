@@ -1,0 +1,46 @@
+.pagination-container {
+  display: flex;
+  list-style-type: none;
+  margin-top: 16px;
+  font-size: 14px;
+}
+.pagination-page {
+  width: 32px;
+  height: 32px;
+  margin: 0 8px;
+  border: 1px solid;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chakra-ui-dark .pagination-page {
+    border-color: var(--chakra-colors-gray-100);
+    color: var(--chakra-colors-gray-100);
+}
+
+.chakra-ui-light .pagination-page {
+    border-color: var(--chakra-colors-gray-700);
+    color: var(--chakra-colors-gray-700);
+}
+
+.chakra-ui-dark .pagination-page--selected {
+    background: var(--chakra-colors-gray-100);
+    color: var(--chakra-colors-gray-700);
+}
+
+.chakra-ui-light .pagination-page--selected {
+    background: var(--chakra-colors-gray-700);
+    color: var(--chakra-colors-gray-100);
+}
+
+.chakra-ui-dark .pagination-page--disabled {
+    background: var(--chakra-colors-gray-600);
+    cursor: not-allowed;
+}
+
+.chakra-ui-light .pagination-page--disabled {
+    background: var(--chakra-colors-gray-200);
+    cursor: not-allowed;
+}
