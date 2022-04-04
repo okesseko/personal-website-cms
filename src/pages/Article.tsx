@@ -1,5 +1,7 @@
+import { Box } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { getArticle } from "../api";
+import Pagination from "../components/Pagination";
 import Table, { TableDataProps, TableHeaderProps } from "../components/Table";
 
 const tableHeader: TableHeaderProps[] = [
@@ -49,13 +51,14 @@ const tableHeader: TableHeaderProps[] = [
 const Article = () => {
   const [tableData, setTableData] = useState<TableDataProps[]>([]);
   const [totalSize, setTotalSize] = useState(0);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     getIntroList();
   }, []);
 
   function getIntroList(order = "desc") {
-    getArticle({ order })
+    getArticle({ order,page })
       .then((res) => {
         setTableData(res.data.articles);
         setTotalSize(res.data.totalSize);
@@ -64,8 +67,10 @@ const Article = () => {
         console.log(err);
       });
   }
-
-  return <Table tableHeader={tableHeader} tableData={tableData} />;
+  return <Box>
+    <Table tableHeader={tableHeader} tableData={tableData} />
+    <Pagination page={page} totalSize={totalSize} onPageChange={(chagedPage)=>setPage(chagedPage)} />
+  </Box>
 };
 
 export default Article;
