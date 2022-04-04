@@ -22,6 +22,7 @@ const tableHeader: TableHeaderProps[] = [
     type: "string",
     title: "content",
     key: "content",
+    style:{whiteSpace:'break-spaces'}
   },
   {
     type: "string",
