@@ -10,6 +10,7 @@ import {
   Image,
   Tr,
   Text,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import dayjs from "dayjs";
 
@@ -65,15 +66,24 @@ const Table = ({ tableData, tableHeader }: TableProps) => {
             key={key}
             isNumeric={type === "number"}
             {...(headerData.style||{})}
-          ><Text noOfLines={2}>{content}</Text></Td>;
+          ><Text noOfLines={2} lineHeight='1.2' fontSize='md' >{content}</Text></Td>;
         })}
       </Tr>
     ));
   }
 
   return (
-    <TableContainer>
-      <TableChakra variant="simple" colorScheme="telegram">
+    <TableContainer css={{
+    '&::-webkit-scrollbar': {
+      width: '6px',
+      height:'6px'
+    },
+    '&::-webkit-scrollbar-thumb': {
+      background:useColorModeValue("#A0AEC0", "#e2e8f0"),
+      borderRadius: '6px',
+    },
+  }}>
+      <TableChakra variant="simple" colorScheme="telegram" >
         <Thead>
           <Tr>
             {tableHeader.map(({ type, key, title }) => (
