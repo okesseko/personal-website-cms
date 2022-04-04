@@ -1,12 +1,10 @@
 import React from "react";
 import {
   Table as TableChakra,
-  TableCaption,
   TableContainer,
   Tbody,
   Td,
   TableCellProps,
-  Tfoot,
   Th,
   Thead,
   Image,
@@ -88,13 +86,6 @@ const Table = ({ tableData, tableHeader }: TableProps) => {
         <Tbody>
           {mappingTableData()}
         </Tbody>
-        <Tfoot>
-          <Tr>
-            <Th>To convert</Th>
-            <Th>into</Th>
-            <Th isNumeric>multiply by</Th>
-          </Tr>
-        </Tfoot>
       </TableChakra>
     </TableContainer>
   );
