@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 import {
   Table as TableChakra,
   TableContainer,
@@ -11,46 +11,50 @@ import {
   Tr,
   Text,
   useColorModeValue,
-} from "@chakra-ui/react";
-import dayjs from "dayjs";
+  IconButton,
+} from "@chakra-ui/react"
+import dayjs from "dayjs"
+
+import { MdEdit, MdOutlineDeleteOutline } from "react-icons/md"
 
 interface TableHeaderProps {
-  type: "string" | "number" | "time" | "image";
-  title: string;
-  key: string;
-  style?: TableCellProps;
+  type: "string" | "number" | "time" | "image"
+  title: string
+  key: string
+  style?: TableCellProps
 }
 
 interface TableDataProps {
-  [key: string]: string | number;
+  [key: string]: string | number
 }
 
 interface TableProps {
-  tableData: TableDataProps[];
-  tableHeader: TableHeaderProps[];
+  tableData: TableDataProps[]
+  tableHeader: TableHeaderProps[]
+  onActionClick: (actionType: "edit" | "delete", id: string) => void
 }
 
-const Table = ({ tableData, tableHeader }: TableProps) => {
+const Table = ({ tableData, tableHeader, onActionClick }: TableProps) => {
   function mappingTableData() {
-    return tableData.map((data) => (
+    return tableData.map(data => (
       <Tr key={data.id}>
-        {tableHeader.map((headerData) => {
-          const type = headerData.type;
-          const key = headerData.key;
-          const value = data[key];
-          let content;
+        {tableHeader.map(headerData => {
+          const type = headerData.type
+          const key = headerData.key
+          const value = data[key]
+          let content
           switch (type) {
             case "string":
-              content = value;
+              content = value
               break
             case "number":
-              content = new Intl.NumberFormat("en").format(value as number);
+              content = new Intl.NumberFormat("en").format(value as number)
               break
             case "time":
               content = dayjs(value).format("YYYY-MM-DD")
               break
             case "image":
-              content =
+              content = (
                 <Image
                   boxSize="60px"
                   objectFit="cover"
@@ -58,35 +62,57 @@ const Table = ({ tableData, tableHeader }: TableProps) => {
                   borderRadius="8px"
                   src={value as string}
                 />
+              )
               break
             default:
-              content = '';
+              content = ""
           }
-          return <Td
-            key={key}
-            isNumeric={type === "number"}
-            {...(headerData.style||{})}
-          ><Text noOfLines={2} lineHeight='1.2' fontSize='md' >{content}</Text></Td>;
+          return (
+            <Td
+              key={key}
+              isNumeric={type === "number"}
+              {...(headerData.style || {})}
+            >
+              <Text noOfLines={2} lineHeight="1.2" fontSize="md">
+                {content}
+              </Text>
+            </Td>
+          )
         })}
+        <Td>
+          <IconButton
+            borderRadius="50%"
+            marginRight="8px"
+            aria-label={"edit"}
+            icon={<MdEdit />}
+            onClick={() => onActionClick("edit", data.id as string)}
+          />
+          <IconButton
+            borderRadius="50%"
+            aria-label={"delete"}
+            icon={<MdOutlineDeleteOutline />}
+            onClick={() => onActionClick("delete", data.id as string)}
+          />
+        </Td>
       </Tr>
-    ));
+    ))
   }
 
   return (
     <TableContainer
       flexGrow={1}
       css={{
-        '&::-webkit-scrollbar': {
-          width: '6px',
-          height:'6px'
+        "&::-webkit-scrollbar": {
+          width: "6px",
+          height: "6px",
         },
-        '&::-webkit-scrollbar-thumb': {
-          background:useColorModeValue("#A0AEC0", "#e2e8f0"),
-          borderRadius: '6px',
+        "&::-webkit-scrollbar-thumb": {
+          background: useColorModeValue("#A0AEC0", "#e2e8f0"),
+          borderRadius: "6px",
         },
       }}
     >
-      <TableChakra variant="simple" colorScheme="telegram" >
+      <TableChakra variant="simple" colorScheme="telegram">
         <Thead>
           <Tr>
             {tableHeader.map(({ type, key, title }) => (
@@ -94,15 +120,14 @@ const Table = ({ tableData, tableHeader }: TableProps) => {
                 {title}
               </Th>
             ))}
+            <Th textAlign="center">Action</Th>
           </Tr>
         </Thead>
-        <Tbody>
-          {mappingTableData()}
-        </Tbody>
+        <Tbody>{mappingTableData()}</Tbody>
       </TableChakra>
     </TableContainer>
-  );
-};
+  )
+}
 
-export default Table;
-export type { TableHeaderProps, TableDataProps };
+export default Table
+export type { TableHeaderProps, TableDataProps }
