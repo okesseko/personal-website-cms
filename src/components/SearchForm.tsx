@@ -20,41 +20,53 @@ interface FieldProps {
   value: string
   type: "text" | "number" | "select"
   placeholder: string
-  options?: { name: string; value: string }[]
+  options?: { name: string; value: string | number }[]
 }
 
 interface SearchFormProps {
+  defaultValue: { [key: string]: string | number }
   fields: FieldProps[]
   onSubmit: (val: any) => void
 }
 
-const SearchForm = ({ fields, onSubmit }: SearchFormProps) => {
+const SearchForm = ({ defaultValue, fields, onSubmit }: SearchFormProps) => {
   const {
     handleSubmit,
     register,
+    reset,
     formState: { isSubmitting },
-  } = useForm()
+  } = useForm(defaultValue)
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form
+      noValidate
+      onSubmit={handleSubmit(obj =>
+        // filter empty value
+        onSubmit(Object.fromEntries(Object.entries(obj).filter(([_, v]) => v)))
+      )}
+      onReset={() => reset(defaultValue)}
+    >
       <Stack direction={["column", "row"]} spacing="16px" textAlign="start">
         {fields.map(({ title, value, type, placeholder, options = [] }) => (
-          <FormControl width="33%">
+          <FormControl key={value}>
             <FormLabel fontSize="14px" htmlFor={value}>
               {title}
             </FormLabel>
             {type === "select" ? (
               <Select
                 borderColor={useColorModeValue("gray.700", "gray.200")}
+                defaultValue=""
                 {...register(value)}
               >
+                <option value="">All</option>
                 {options.map(option => (
-                  <option value={option.value}>{option.name}</option>
+                  <option key={option.value} value={option.value}>
+                    {option.name}
+                  </option>
                 ))}
               </Select>
             ) : (
               <Input
-                id="first-name"
                 type={type}
                 placeholder={placeholder}
                 borderColor={useColorModeValue("gray.700", "gray.200")}
