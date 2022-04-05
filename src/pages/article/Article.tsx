@@ -67,7 +67,7 @@ const STATUS = ["Hidden", "Visiable"]
 const Article = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const [categroyList, setCategoryList] = useState<
+  const [categoryList, setCategoryList] = useState<
     { name: string; value: string }[]
   >([])
   const [searchCondtion, setSearchCondition] = useState<{
@@ -75,6 +75,11 @@ const Article = () => {
   }>({ page: 1 })
   const [tableData, setTableData] = useState<TableDataProps[]>([])
   const [totalSize, setTotalSize] = useState(0)
+  const categoryOptions = categoryList.map(({ name, value }) => ({
+    name,
+    value,
+  }))
+  const statusOptions = STATUS.map((name, index) => ({ name, value: index }))
 
   const SearchFields: FieldProps[] = [
     {
@@ -94,14 +99,14 @@ const Article = () => {
       value: "category",
       type: "select",
       placeholder: "Search by category",
-      options: categroyList.map(({ name, value }) => ({ name, value })),
+      options: categoryOptions,
     },
     {
       title: "Status",
       value: "status",
       type: "select",
       placeholder: "Search by status",
-      options: STATUS.map((name, index) => ({ name, value: index })),
+      options: statusOptions,
     },
   ]
 
@@ -117,14 +122,14 @@ const Article = () => {
 
   useEffect(() => {
     getIntroList()
-  }, [categroyList, searchCondtion])
+  }, [categoryList, searchCondtion])
 
   function getIntroList(order = "desc") {
     getArticle({ order, ...searchCondtion })
       .then(res => {
         setTableData(
           res.data.articles.map((article: any) => {
-            const category = getCategoryInfo(categroyList, article.category)
+            const category = getCategoryInfo(categoryList, article.category)
             return {
               ...article,
               category: category?.name,
@@ -160,7 +165,7 @@ const Article = () => {
         <Button
           width="fit-content"
           size="sm"
-          variant='outline'
+          variant="outline"
           borderColor={useColorModeValue("gray.700", "gray.200")}
           onClick={onOpen}
           leftIcon={<MdAdd />}
@@ -180,7 +185,12 @@ const Article = () => {
           }
         />
       </Flex>
-      <ModalTemplate isOpen={isOpen} onClose={onClose}  />
+      <ModalTemplate
+        isOpen={isOpen}
+        onClose={onClose}
+        categoryList={categoryOptions}
+        statusList={statusOptions}
+      />
     </Box>
   )
 }
