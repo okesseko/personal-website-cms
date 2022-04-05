@@ -39,7 +39,7 @@ export default function SimpleSidebar({ children }: { children: ReactNode }) {
       bg={useColorModeValue("gray.100", "gray.700")}
     >
       <SidebarContent onClose={() => onClose} />
-      <Box ml={{ base: 60 }} p="4">
+      <Box h="calc(100vh - 65px)" ml={{ base: 60 }} p="4">
         {children}
       </Box>
     </Box>
