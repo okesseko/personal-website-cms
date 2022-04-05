@@ -73,16 +73,19 @@ const Table = ({ tableData, tableHeader }: TableProps) => {
   }
 
   return (
-    <TableContainer css={{
-    '&::-webkit-scrollbar': {
-      width: '6px',
-      height:'6px'
-    },
-    '&::-webkit-scrollbar-thumb': {
-      background:useColorModeValue("#A0AEC0", "#e2e8f0"),
-      borderRadius: '6px',
-    },
-  }}>
+    <TableContainer
+      flexGrow={1}
+      css={{
+        '&::-webkit-scrollbar': {
+          width: '6px',
+          height:'6px'
+        },
+        '&::-webkit-scrollbar-thumb': {
+          background:useColorModeValue("#A0AEC0", "#e2e8f0"),
+          borderRadius: '6px',
+        },
+      }}
+    >
       <TableChakra variant="simple" colorScheme="telegram" >
         <Thead>
           <Tr>
