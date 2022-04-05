@@ -1,64 +1,73 @@
 import {
-  Input,
+  Button,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   InputGroup,
-  InputLeftElement,
-  FormErrorMessage,
-  Code,
-  Icon,
+  Text,
+  Image,
+  HStack,
+  VStack,
 } from "@chakra-ui/react"
+import { ReactNode, useRef } from "react"
+import { UseFormRegisterReturn } from "react-hook-form"
 import { FiFile } from "react-icons/fi"
-import { useController } from "react-hook-form"
-import { useRef } from "react"
+import { MdOutlineDeleteOutline } from "react-icons/md"
+
+interface FileUploadProps {
+  register: UseFormRegisterReturn
+  errors: {
+    [x: string]: any
+  }
+  uploadFile?: File
+  handleClear: () => void
+}
 
 const FileUpload = ({
+  register,
   errors,
-  name,
-  placeholder,
-  acceptedFileTypes,
-  control,
-  children,
-  isRequired = false,
-}: any) => {
-  const inputRef = useRef<any>(null)
-  const {
-    field: { ref, value, ...inputProps },
-  } = useController({
-    name,
-    control,
-    rules: { required: isRequired },
-  })
+  uploadFile,
+  handleClear,
+}: FileUploadProps) => {
+  const inputRef = useRef<HTMLInputElement | null>(null)
+  const { ref, ...rest } = register as {
+    ref: (instance: HTMLInputElement | null) => void
+  }
 
+  const handleClick = () => inputRef.current?.click()
   return (
-    <FormControl isInvalid={errors[name]}>
-      <FormLabel htmlFor="writeUpFile">{children}</FormLabel>
-      <InputGroup>
-        <InputLeftElement
-          pointerEvents="none"
-          children={<Icon as={FiFile} />}
+    <FormControl isInvalid={errors.previewImg} isRequired>
+      <FormLabel>{"File input"}</FormLabel>
+      <InputGroup onClick={handleClick}>
+        <input
+          hidden
+          type={"file"}
+          accept={"image/*"}
+          {...rest}
+          ref={e => {
+            ref(e)
+            inputRef.current = e
+          }}
         />
-        {/* <input
-          type="file"
-          accept={acceptedFileTypes}
-          ref={inputRef}
-          {...inputProps}
-          name={name}
-        
-          style={{ display: "none" }}
-        /> */}
-        <Input
-          name={name}
-          type="file"
-          accept={acceptedFileTypes}
-          placeholder={placeholder}
-          // onClick={() => inputRef.current.click()}
-          value={value}
-        />
+
+        <Button leftIcon={<FiFile />}>Upload</Button>
       </InputGroup>
+      {uploadFile && (
+        <VStack spacing={4}>
+          <Text>{uploadFile.name}</Text>
+          <Image
+            width="200"
+            height="200"
+            objectFit="contain"
+            src={URL.createObjectURL(uploadFile)}
+          />
+          <Button leftIcon={<MdOutlineDeleteOutline />} onClick={handleClear}>
+            Clear
+          </Button>
+        </VStack>
+      )}
       <FormErrorMessage>
-        {" "}
-        {errors[name] && errors[name].message}
+        {errors.previewImg && errors.previewImg.message}
       </FormErrorMessage>
     </FormControl>
   )
