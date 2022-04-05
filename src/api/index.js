@@ -15,6 +15,13 @@ const getArticle = params =>
     url: "/article",
   })
 
+const postArticle = body =>
+  defaultRequest({
+    data: body,
+    method: "post",
+    url: "/article",
+  })
+
 // category
 const getCategory = params =>
   defaultRequest({
@@ -23,4 +30,4 @@ const getCategory = params =>
     url: "/category",
   })
 
-export { getArticle, getCategory }
+export { getArticle, postArticle, getCategory }
