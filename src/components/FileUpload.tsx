@@ -35,6 +35,7 @@ const FileUpload = ({
   }
 
   const handleClick = () => inputRef.current?.click()
+
   return (
     <FormControl isInvalid={errors.previewImg} isRequired>
       <FormLabel>{"File input"}</FormLabel>
@@ -59,7 +60,11 @@ const FileUpload = ({
             width="200"
             height="200"
             objectFit="contain"
-            src={URL.createObjectURL(uploadFile)}
+            src={
+              typeof uploadFile === "string"
+                ? uploadFile
+                : URL.createObjectURL(uploadFile)
+            }
           />
           <Button leftIcon={<MdOutlineDeleteOutline />} onClick={handleClear}>
             Clear
