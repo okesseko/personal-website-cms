@@ -1,0 +1,12 @@
+.chakra-ui-dark .quill-wrapper .ql-toolbar.ql-snow {
+  background-color: #e2e8f0;
+}
+
+.chakra-ui-light .quill-wrapper .ql-toolbar,
+.chakra-ui-light .quill-wrapper .ql-container {
+  border-color: #2d3748;
+}
+
+.quill-wrapper .ql-container {
+  height: 240px;
+}
