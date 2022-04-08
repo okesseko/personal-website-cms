@@ -1,5 +1,6 @@
 import {
   Button,
+  ComponentWithAs,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -12,21 +13,25 @@ import {
   NumberInputStepper,
   Select,
   Textarea,
+  TextareaProps,
   useColorModeValue,
 } from "@chakra-ui/react"
-import React from "react"
-import { useForm } from "react-hook-form"
+import React, { useEffect, useRef } from "react"
+import { FieldValues, useForm, UseFormSetValue } from "react-hook-form"
 import FileUpload from "../../components/FileUpload"
 import Modal from "../../components/Modal"
-import { FiFile } from "react-icons/fi"
 import convertImageToBase64 from "../../utils/convertImageToBase64"
-import { postArticle } from "../../api"
+import { postArticle, patchArticle } from "../../api"
 import ReactQuill from "react-quill"
+import "react-quill/dist/quill.snow.css"
+import "./modalTemplate.css"
 interface ModalTemplateProps {
   isOpen: boolean
   onClose: () => void
   categoryList: { name: string; value: string | number }[]
   statusList: { name: string; value: string | number }[]
+  refetchData: () => void
+  editData: { [key: string]: string | number }
 }
 
 const ModalTemplate = ({
@@ -34,6 +39,8 @@ const ModalTemplate = ({
   onClose,
   categoryList,
   statusList,
+  refetchData,
+  editData = {},
 }: ModalTemplateProps) => {
   const {
     handleSubmit,
@@ -42,10 +49,22 @@ const ModalTemplate = ({
     resetField,
     watch,
     formState: { errors },
-  } = useForm()
+    setValue,
+  } = useForm({})
+
   const watchPreviewImg = watch("previewImg", [])
 
-  const fields: Omit<FormFieldProps, "errors">[] = [
+  const isPreviewImgObject = typeof watchPreviewImg === "object"
+
+  const uploadImageUrl = () => {
+    if (isPreviewImgObject) {
+      if (watchPreviewImg) return watchPreviewImg[0]
+      return undefined
+    }
+    return watchPreviewImg
+  }
+
+  const fields: Omit<FormFieldProps, "errors" | "setValue">[] = [
     {
       title: "Title",
       value: "title",
@@ -67,6 +86,7 @@ const ModalTemplate = ({
       type: "textarea",
       placeholder: "Input content",
       detail: register("content", { required: "Please input content" }),
+      defaultValue: editData.content,
     },
     {
       title: "Emotion Icon",
@@ -119,30 +139,57 @@ const ModalTemplate = ({
     return true
   }
 
+  useEffect(() => {
+    Object.entries(editData).forEach(([key, val]) => {
+      setValue(key, val)
+    })
+  }, [editData])
+
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit(async val => {
-        const base64Image = await convertImageToBase64(val.previewImg[0]).then(
-          data => data
-        )
-        postArticle({
-          ...val,
-          previewImg: base64Image,
-        })
+        if (editData.id) {
+          // edit
+          const base64Image = isPreviewImgObject
+            ? await convertImageToBase64(val.previewImg[0]).then(data => data)
+            : val.previewImg
+
+          patchArticle(editData.id, {
+            ...val,
+            previewImg: base64Image,
+          }).then(refetchData)
+        } else {
+          // create
+          const base64Image = await convertImageToBase64(
+            val.previewImg[0]
+          ).then(data => data)
+
+          postArticle({
+            ...val,
+            previewImg: base64Image,
+          }).then(refetchData)
+        }
+
         onClose()
+        reset({})
       })}
       onReset={() => reset({})}
     >
       <FileUpload
         errors={errors}
         register={register("previewImg", { validate: validateFiles })}
-        uploadFile={watchPreviewImg ? watchPreviewImg[0] : undefined}
+        uploadFile={uploadImageUrl()}
         handleClear={() => resetField("previewImg")}
       />
       {fields.map(field => (
-        <FormField key={field.value} errors={errors} {...field} />
+        <FormField
+          key={field.value}
+          errors={errors}
+          setValue={setValue}
+          {...field}
+        />
       ))}
     </Modal>
   )
@@ -155,7 +202,9 @@ interface FormFieldProps {
   detail: any
   type: "text" | "number" | "date" | "select" | "textarea"
   placeholder: string
+  setValue: UseFormSetValue<FieldValues>
   options?: { name: string; value: string | number }[]
+  defaultValue?: string | number
 }
 
 const FormField = ({
@@ -165,7 +214,9 @@ const FormField = ({
   detail,
   type,
   placeholder,
+  setValue,
   options = [],
+  defaultValue,
 }: FormFieldProps) => {
   const borderColor = useColorModeValue("gray.700", "gray.200")
 
@@ -182,21 +233,62 @@ const FormField = ({
           />
         )
       case "textarea":
+        let filterTimeout: NodeJS.Timeout
         return (
-          <ReactQuill />
-          // <Textarea
-          //   size="md"
-          //   resize="vertical"
-          //   placeholder={placeholder}
-          //   borderColor={borderColor}
-          //   {...detail}
-          // />
+          <div>
+            <ReactQuill
+              className="quill-wrapper"
+              defaultValue={defaultValue as string}
+              modules={{
+                toolbar: [
+                  [{ font: [] }],
+                  [{ header: [false, 6, 5, 4, 3, 2, 1] }],
+                  ["bold", "italic", "underline", "strike", "blockquote"],
+                  [{ color: [] }, { background: [] }],
+                  [
+                    { align: [] },
+                    { list: "ordered" },
+                    { list: "bullet" },
+                    { indent: "-1" },
+                    { indent: "+1" },
+                  ],
+                  ["link", "image", "video"],
+                  ["clean"],
+                ],
+              }}
+              formats={[
+                "font",
+                "header",
+                "bold",
+                "italic",
+                "underline",
+                "strike",
+                "blockquote",
+                "align",
+                "color",
+                "background",
+                "list",
+                "bullet",
+                "indent",
+                "link",
+                "image",
+                "video",
+              ]}
+              onChange={e => {
+                clearTimeout(filterTimeout)
+                filterTimeout = setTimeout(() => {
+                  setValue(value, e)
+                }, 500)
+              }}
+            />
+            <input hidden {...detail} />
+          </div>
         )
       case "number":
         return (
           <NumberInput
             min={1}
-            max={20}
+            max={2000}
             placeholder={placeholder}
             borderColor={borderColor}
             {...detail}
