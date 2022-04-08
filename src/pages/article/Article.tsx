@@ -38,7 +38,7 @@ const TABLE_HEADER: TableHeaderProps[] = [
     type: "string",
     title: "content",
     key: "content",
-    style: { whiteSpace: "break-spaces" },
+    style: { whiteSpace: "break-spaces", maxW: "300px" },
   },
   {
     type: "string",
@@ -70,11 +70,13 @@ const Article = () => {
   const [categoryList, setCategoryList] = useState<
     { name: string; value: string }[]
   >([])
-  const [searchCondtion, setSearchCondition] = useState<{
+  const [searchCondition, setSearchCondition] = useState<{
     [key: string]: string | number
   }>({ page: 1 })
   const [tableData, setTableData] = useState<TableDataProps[]>([])
   const [totalSize, setTotalSize] = useState(0)
+  const [editInfo, setEditInfo] = useState({})
+
   const categoryOptions = categoryList.map(({ name, value }) => ({
     name,
     value,
@@ -122,10 +124,13 @@ const Article = () => {
 
   useEffect(() => {
     getIntroList()
-  }, [categoryList, searchCondtion])
+  }, [categoryList, searchCondition])
 
   function getIntroList(order = "desc") {
-    getArticle({ order, ...searchCondtion })
+    // clear edit info when get new intro list
+    setEditInfo({})
+    console.log(searchCondition)
+    getArticle({ order, ...searchCondition })
       .then(res => {
         setTableData(
           res.data.articles.map((article: any) => {
@@ -145,6 +150,12 @@ const Article = () => {
   }
 
   function actionClick(type: "edit" | "delete", id: string) {
+    if (type === "edit") {
+      getArticle({ id }).then(res => {
+        setEditInfo(res.data.articles[0])
+        onOpen()
+      })
+    }
     console.log(type, id)
   }
 
@@ -159,7 +170,7 @@ const Article = () => {
           }}
           fields={SearchFields}
           onSubmit={val =>
-            setSearchCondition({ page: searchCondtion.page, ...val })
+            setSearchCondition({ page: searchCondition.page, ...val })
           }
         />
         <Button
@@ -178,10 +189,10 @@ const Article = () => {
           onActionClick={actionClick}
         />
         <Pagination
-          page={searchCondtion.page as number}
+          page={searchCondition.page as number}
           totalSize={totalSize}
           onPageChange={chagedPage =>
-            setSearchCondition({ ...searchCondtion, page: chagedPage })
+            setSearchCondition({ ...searchCondition, page: chagedPage })
           }
         />
       </Flex>
@@ -190,6 +201,8 @@ const Article = () => {
         onClose={onClose}
         categoryList={categoryOptions}
         statusList={statusOptions}
+        refetchData={getIntroList}
+        editData={editInfo}
       />
     </Box>
   )
