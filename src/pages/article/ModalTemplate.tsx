@@ -21,6 +21,7 @@ import Modal from "../../components/Modal"
 import { FiFile } from "react-icons/fi"
 import convertImageToBase64 from "../../utils/convertImageToBase64"
 import { postArticle } from "../../api"
+import ReactQuill from "react-quill"
 interface ModalTemplateProps {
   isOpen: boolean
   onClose: () => void
@@ -130,10 +131,6 @@ const ModalTemplate = ({
           ...val,
           previewImg: base64Image,
         })
-        console.log({
-          ...val,
-          previewImg: base64Image,
-        })
         onClose()
       })}
       onReset={() => reset({})}
@@ -186,13 +183,14 @@ const FormField = ({
         )
       case "textarea":
         return (
-          <Textarea
-            size="md"
-            resize="vertical"
-            placeholder={placeholder}
-            borderColor={borderColor}
-            {...detail}
-          />
+          <ReactQuill />
+          // <Textarea
+          //   size="md"
+          //   resize="vertical"
+          //   placeholder={placeholder}
+          //   borderColor={borderColor}
+          //   {...detail}
+          // />
         )
       case "number":
         return (
