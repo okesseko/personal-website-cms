@@ -75,14 +75,6 @@ const ModalTemplate = ({
         options: categoryList,
       },
       {
-        title: "Content",
-        value: "content",
-        type: "textarea",
-        placeholder: "Input content",
-        detail: register("content", { required: "Please input content" }),
-        defaultValue: watchContent,
-      },
-      {
         title: "Emotion Icon",
         value: "emotionIcon",
         type: "text",
@@ -116,6 +108,14 @@ const ModalTemplate = ({
         detail: register("releaseTime", {
           required: "Please select releaseTime",
         }),
+      },
+      {
+        title: "Content",
+        value: "content",
+        type: "textarea",
+        placeholder: "Input content",
+        detail: register("content", { required: "Please input content" }),
+        defaultValue: watchContent,
       },
     ],
     [register, watchContent]
@@ -159,30 +159,31 @@ const ModalTemplate = ({
       title={`${isEdit ? "Edit" : "Create"} Article`}
       submitText={isEdit ? "Edit" : "Create"}
       onSubmit={handleSubmit(async val => {
-        if (isEdit) {
-          // edit
-          const base64Image = isPreviewImgObject
-            ? await convertImageToBase64(val.previewImg[0]).then(data => data)
-            : val.previewImg
+        console.log(val)
+        // if (isEdit) {
+        //   // edit
+        //   const base64Image = isPreviewImgObject
+        //     ? await convertImageToBase64(val.previewImg[0]).then(data => data)
+        //     : val.previewImg
 
-          patchArticle(editData.id, {
-            ...val,
-            previewImg: base64Image,
-          }).then(() => refetchData())
-        } else {
-          // create
-          const base64Image = await convertImageToBase64(
-            val.previewImg[0]
-          ).then(data => data)
+        //   patchArticle(editData.id, {
+        //     ...val,
+        //     previewImg: base64Image,
+        //   }).then(() => refetchData())
+        // } else {
+        //   // create
+        //   const base64Image = await convertImageToBase64(
+        //     val.previewImg[0]
+        //   ).then(data => data)
 
-          postArticle({
-            ...val,
-            previewImg: base64Image,
-          }).then(() => refetchData())
-        }
+        //   postArticle({
+        //     ...val,
+        //     previewImg: base64Image,
+        //   }).then(() => refetchData())
+        // }
 
-        onClose()
-        reset({})
+        // onClose()
+        // reset({})
       })}
     >
       <FileUpload
@@ -199,6 +200,16 @@ const ModalTemplate = ({
           {...field}
         />
       ))}
+      {/* <FormField
+        errors={errors}
+        setValue={setValue}
+        title="Content"
+        value="content"
+        type="textarea"
+        placeholder="Input content"
+        detail={register("content", { required: "Please input content" })}
+        defaultValue={watchContent}
+      /> */}
     </Modal>
   )
 }
@@ -210,9 +221,9 @@ interface FormFieldProps {
   detail: any
   type: "text" | "number" | "date" | "select" | "textarea"
   placeholder: string
-  setValue: UseFormSetValue<FieldValues>
+  setValue?: UseFormSetValue<FieldValues>
   options?: { name: string; value: string | number }[]
-  defaultValue?: string | number
+  defaultValue?: string
 }
 
 const FormField = ({
@@ -222,7 +233,7 @@ const FormField = ({
   detail,
   type,
   placeholder,
-  setValue,
+  setValue = () => {},
   options = [],
   defaultValue,
 }: FormFieldProps) => {
@@ -243,12 +254,12 @@ const FormField = ({
         )
       case "textarea":
         let filterTimeout: NodeJS.Timeout
-        console.log("123")
+        console.log(defaultValue)
         return (
           <div>
             <ReactQuill
               className="quill-wrapper"
-              value={defaultValue as string}
+              defaultValue={defaultValue}
               modules={{
                 toolbar: [
                   [{ font: [] }],
@@ -284,15 +295,16 @@ const FormField = ({
                 "image",
                 "video",
               ]}
-              // {...detail}
               onChange={e => {
-                clearTimeout(filterTimeout)
-                filterTimeout = setTimeout(() => {
-                  setValue(value, e)
-                }, 500)
+                // nowValue = e
+                // // setValue(value, e)
+                // clearTimeout(filterTimeout)
+                // filterTimeout = setTimeout(() => {
+                //   setValue(value, e)
+                // }, 500)
               }}
+              onBlur={(_, __, { getHTML }) => console.log(getHTML())}
             />
-            {/* <input hidden {...detail} /> */}
           </div>
         )
       case "number":
