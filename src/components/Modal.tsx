@@ -14,31 +14,33 @@ import { ReactNode } from "react"
 interface ModalProps {
   isOpen: boolean
   onClose: () => void
+  title: string
+  submitText?: string
   children: ReactNode
-  onReset: (val: any) => void
   onSubmit: (val: any) => void
 }
 
 const Modal = ({
   isOpen,
   onClose,
+  title,
+  submitText = "submit",
   children,
-  onReset,
   onSubmit,
 }: ModalProps) => {
   return (
     <ModalChakra isOpen={isOpen} onClose={onClose} size="4xl">
       <ModalOverlay />
       <ModalContent>
-        <form onSubmit={onSubmit} onReset={onReset}>
-          <ModalHeader>Create Article</ModalHeader>
+        <form onSubmit={onSubmit}>
+          <ModalHeader>{title}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <VStack spacing={4}>{children}</VStack>
           </ModalBody>
           <ModalFooter>
             <Button type="submit" colorScheme="blue" mr={3}>
-              Create
+              {submitText}
             </Button>
             <Button type="reset" variant="ghost" onClick={onClose}>
               Cancel
