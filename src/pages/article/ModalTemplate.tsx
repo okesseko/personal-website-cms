@@ -16,7 +16,7 @@ import {
   TextareaProps,
   useColorModeValue,
 } from "@chakra-ui/react"
-import React, { useEffect, useRef } from "react"
+import React, { useEffect, useMemo, useRef } from "react"
 import { FieldValues, useForm, UseFormSetValue } from "react-hook-form"
 import FileUpload from "../../components/FileUpload"
 import Modal from "../../components/Modal"
@@ -53,8 +53,73 @@ const ModalTemplate = ({
   } = useForm({})
 
   const watchPreviewImg = watch("previewImg", [])
+  const watchContent = watch("content", [])
 
   const isPreviewImgObject = typeof watchPreviewImg === "object"
+  const isEdit = !!editData.id
+  const fields: Omit<FormFieldProps, "errors" | "setValue">[] = useMemo(
+    () => [
+      {
+        title: "Title",
+        value: "title",
+        type: "text",
+        placeholder: "Input title",
+        detail: register("title", { required: "Please input title" }),
+      },
+      {
+        title: "Category",
+        value: "category",
+        type: "select",
+        placeholder: "Select category",
+        detail: register("category", { required: "Please select category" }),
+        options: categoryList,
+      },
+      {
+        title: "Content",
+        value: "content",
+        type: "textarea",
+        placeholder: "Input content",
+        detail: register("content", { required: "Please input content" }),
+        defaultValue: watchContent,
+      },
+      {
+        title: "Emotion Icon",
+        value: "emotionIcon",
+        type: "text",
+        placeholder: "Input emotion icon",
+        detail: register("emotionIcon", {
+          required: "Please input emotion ccon",
+        }),
+      },
+      {
+        title: "Emotion Number",
+        value: "emotionNumber",
+        type: "number",
+        placeholder: "Input emotion number",
+        detail: register("emotionNumber", {
+          required: "Please input emotion number",
+        }),
+      },
+      {
+        title: "Status",
+        value: "status",
+        type: "select",
+        placeholder: "Select status",
+        detail: register("status", { required: "Please select status" }),
+        options: statusList,
+      },
+      {
+        title: "Release Time",
+        value: "releaseTime",
+        type: "date",
+        placeholder: "Select release time",
+        detail: register("releaseTime", {
+          required: "Please select releaseTime",
+        }),
+      },
+    ],
+    [register, watchContent]
+  )
 
   const uploadImageUrl = () => {
     if (isPreviewImgObject) {
@@ -63,67 +128,6 @@ const ModalTemplate = ({
     }
     return watchPreviewImg
   }
-
-  const fields: Omit<FormFieldProps, "errors" | "setValue">[] = [
-    {
-      title: "Title",
-      value: "title",
-      type: "text",
-      placeholder: "Input title",
-      detail: register("title", { required: "Please input title" }),
-    },
-    {
-      title: "Category",
-      value: "category",
-      type: "select",
-      placeholder: "Select category",
-      detail: register("category", { required: "Please select category" }),
-      options: categoryList,
-    },
-    {
-      title: "Content",
-      value: "content",
-      type: "textarea",
-      placeholder: "Input content",
-      detail: register("content", { required: "Please input content" }),
-      defaultValue: editData.content,
-    },
-    {
-      title: "Emotion Icon",
-      value: "emotionIcon",
-      type: "text",
-      placeholder: "Input emotion icon",
-      detail: register("emotionIcon", {
-        required: "Please input emotionIcon",
-      }),
-    },
-    {
-      title: "Emotion Number",
-      value: "emotionNumber",
-      type: "number",
-      placeholder: "Input emotion number",
-      detail: register("emotionNumber", {
-        required: "Please input emotionNumber",
-      }),
-    },
-    {
-      title: "Status",
-      value: "status",
-      type: "select",
-      placeholder: "Select status",
-      detail: register("status", { required: "Please select status" }),
-      options: statusList,
-    },
-    {
-      title: "Release Time",
-      value: "releaseTime",
-      type: "date",
-      placeholder: "Select release time",
-      detail: register("releaseTime", {
-        required: "Please select releaseTime",
-      }),
-    },
-  ]
 
   const validateFiles = (value: FileList) => {
     if (value.length < 1) {
@@ -148,9 +152,14 @@ const ModalTemplate = ({
   return (
     <Modal
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={() => {
+        onClose()
+        reset({})
+      }}
+      title={`${isEdit ? "Edit" : "Create"} Article`}
+      submitText={isEdit ? "Edit" : "Create"}
       onSubmit={handleSubmit(async val => {
-        if (editData.id) {
+        if (isEdit) {
           // edit
           const base64Image = isPreviewImgObject
             ? await convertImageToBase64(val.previewImg[0]).then(data => data)
@@ -159,7 +168,7 @@ const ModalTemplate = ({
           patchArticle(editData.id, {
             ...val,
             previewImg: base64Image,
-          }).then(refetchData)
+          }).then(() => refetchData())
         } else {
           // create
           const base64Image = await convertImageToBase64(
@@ -169,13 +178,12 @@ const ModalTemplate = ({
           postArticle({
             ...val,
             previewImg: base64Image,
-          }).then(refetchData)
+          }).then(() => refetchData())
         }
 
         onClose()
         reset({})
       })}
-      onReset={() => reset({})}
     >
       <FileUpload
         errors={errors}
@@ -229,16 +237,18 @@ const FormField = ({
             type={type}
             placeholder={placeholder}
             borderColor={borderColor}
+            required={false}
             {...detail}
           />
         )
       case "textarea":
         let filterTimeout: NodeJS.Timeout
+        console.log("123")
         return (
           <div>
             <ReactQuill
               className="quill-wrapper"
-              defaultValue={defaultValue as string}
+              value={defaultValue as string}
               modules={{
                 toolbar: [
                   [{ font: [] }],
@@ -274,6 +284,7 @@ const FormField = ({
                 "image",
                 "video",
               ]}
+              // {...detail}
               onChange={e => {
                 clearTimeout(filterTimeout)
                 filterTimeout = setTimeout(() => {
@@ -281,30 +292,25 @@ const FormField = ({
                 }, 500)
               }}
             />
-            <input hidden {...detail} />
+            {/* <input hidden {...detail} /> */}
           </div>
         )
       case "number":
         return (
-          <NumberInput
-            min={1}
-            max={2000}
+          <Input
+            type={type}
             placeholder={placeholder}
             borderColor={borderColor}
+            required={false}
             {...detail}
-          >
-            <NumberInputField />
-            <NumberInputStepper>
-              <NumberIncrementStepper />
-              <NumberDecrementStepper />
-            </NumberInputStepper>
-          </NumberInput>
+          />
         )
       case "select":
         return (
           <Select
             placeholder={placeholder}
             borderColor={borderColor}
+            required={false}
             {...detail}
           >
             {options.map(option => (
@@ -318,7 +324,7 @@ const FormField = ({
   }
 
   return (
-    <FormControl /*isRequired={isRequired}*/ isInvalid={errors[value]}>
+    <FormControl isRequired isInvalid={errors[value]}>
       <FormLabel fontSize="14px" htmlFor={value}>
         {title}
       </FormLabel>
