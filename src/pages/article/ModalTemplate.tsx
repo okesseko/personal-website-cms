@@ -1,19 +1,9 @@
 import {
-  Button,
-  ComponentWithAs,
   FormControl,
   FormErrorMessage,
   FormLabel,
-  Icon,
   Input,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
   Select,
-  Textarea,
-  TextareaProps,
   useColorModeValue,
 } from "@chakra-ui/react"
 import React, { useEffect, useMemo, useRef } from "react"
@@ -25,6 +15,7 @@ import { postArticle, patchArticle } from "../../api"
 import ReactQuill from "react-quill"
 import "react-quill/dist/quill.snow.css"
 import "./modalTemplate.css"
+import dayjs from "dayjs"
 interface ModalTemplateProps {
   isOpen: boolean
   onClose: () => void
@@ -118,7 +109,7 @@ const ModalTemplate = ({
         defaultValue: watchContent,
       },
     ],
-    [register, watchContent]
+    [register, watchContent,categoryList]
   )
 
   const uploadImageUrl = () => {
@@ -145,7 +136,10 @@ const ModalTemplate = ({
 
   useEffect(() => {
     Object.entries(editData).forEach(([key, val]) => {
-      setValue(key, val)
+      if(key==='releaseTime')
+        setValue(key, dayjs(val).format('YYYY-MM-DD'))
+      else 
+        setValue(key,val)
     })
   }, [editData])
 
@@ -160,30 +154,30 @@ const ModalTemplate = ({
       submitText={isEdit ? "Edit" : "Create"}
       onSubmit={handleSubmit(async val => {
         console.log(val)
-        // if (isEdit) {
-        //   // edit
-        //   const base64Image = isPreviewImgObject
-        //     ? await convertImageToBase64(val.previewImg[0]).then(data => data)
-        //     : val.previewImg
+        if (isEdit) {
+          // edit
+          const base64Image = isPreviewImgObject
+            ? await convertImageToBase64(val.previewImg[0]).then(data => data)
+            : val.previewImg
 
-        //   patchArticle(editData.id, {
-        //     ...val,
-        //     previewImg: base64Image,
-        //   }).then(() => refetchData())
-        // } else {
-        //   // create
-        //   const base64Image = await convertImageToBase64(
-        //     val.previewImg[0]
-        //   ).then(data => data)
+          patchArticle(editData.id, {
+            ...val,
+            previewImg: base64Image,
+          }).then(() => refetchData())
+        } else {
+          // create
+          const base64Image = await convertImageToBase64(
+            val.previewImg[0]
+          ).then(data => data)
 
-        //   postArticle({
-        //     ...val,
-        //     previewImg: base64Image,
-        //   }).then(() => refetchData())
-        // }
+          postArticle({
+            ...val,
+            previewImg: base64Image,
+          }).then(() => refetchData())
+        }
 
-        // onClose()
-        // reset({})
+        onClose()
+        reset({})
       })}
     >
       <FileUpload
@@ -200,16 +194,6 @@ const ModalTemplate = ({
           {...field}
         />
       ))}
-      {/* <FormField
-        errors={errors}
-        setValue={setValue}
-        title="Content"
-        value="content"
-        type="textarea"
-        placeholder="Input content"
-        detail={register("content", { required: "Please input content" })}
-        defaultValue={watchContent}
-      /> */}
     </Modal>
   )
 }
@@ -254,7 +238,6 @@ const FormField = ({
         )
       case "textarea":
         let filterTimeout: NodeJS.Timeout
-        console.log(defaultValue)
         return (
           <div>
             <ReactQuill
@@ -296,14 +279,11 @@ const FormField = ({
                 "video",
               ]}
               onChange={e => {
-                // nowValue = e
-                // // setValue(value, e)
-                // clearTimeout(filterTimeout)
-                // filterTimeout = setTimeout(() => {
-                //   setValue(value, e)
-                // }, 500)
+                clearTimeout(filterTimeout)
+                filterTimeout = setTimeout(() => {
+                  setValue(value, e)
+                }, 500)
               }}
-              onBlur={(_, __, { getHTML }) => console.log(getHTML())}
             />
           </div>
         )
