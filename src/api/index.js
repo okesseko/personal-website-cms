@@ -29,6 +29,12 @@ const patchArticle = (id, body) =>
     url: `/article/${id}`,
   })
 
+const deleteArticle = id =>
+  defaultRequest({
+    method: "delete",
+    url: `/article/${id}`,
+  })
+
 // category
 const getCategory = params =>
   defaultRequest({
@@ -37,4 +43,4 @@ const getCategory = params =>
     url: "/category",
   })
 
-export { getArticle, postArticle, patchArticle, getCategory }
+export { getArticle, postArticle, patchArticle, deleteArticle, getCategory }
