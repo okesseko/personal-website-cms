@@ -4,19 +4,21 @@ import {
   Flex,
   Input,
   Select,
-  Stack,
+  Text,
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react"
 import React, { useEffect, useRef, useState } from "react"
-import { getArticle, getCategory } from "../../api"
+import { getArticle, getCategory,deleteArticle } from "../../api"
 import Modal from "../../components/Modal"
 import Pagination from "../../components/Pagination"
 import SearchForm, { FieldProps } from "../../components/SearchForm"
 import Table, { TableDataProps, TableHeaderProps } from "../../components/Table"
 import getCategoryInfo from "../../utils/getCategoryInfo"
 import { MdAdd } from "react-icons/md"
+import { FiAlertCircle } from "react-icons/fi"
 import ModalTemplate from "./ModalTemplate"
+
 
 const TABLE_HEADER: TableHeaderProps[] = [
   {
@@ -65,7 +67,17 @@ const TABLE_HEADER: TableHeaderProps[] = [
 const STATUS = ["Hidden", "Visiable"]
 
 const Article = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const {
+    isOpen: isModalTemplateOpen,
+    onOpen: onModalTemplateOpen,
+    onClose: onModalTemplateClose
+  } = useDisclosure()
+
+   const {
+    isOpen: isDeleteComfirmOpen,
+    onOpen: onDeleteComfirmOpen,
+    onClose: onDeleteComfirmClose
+  } = useDisclosure()
 
   const [categoryList, setCategoryList] = useState<
     { name: string; value: string }[]
@@ -76,6 +88,7 @@ const Article = () => {
   const [tableData, setTableData] = useState<TableDataProps[]>([])
   const [totalSize, setTotalSize] = useState(0)
   const [editInfo, setEditInfo] = useState({})
+  const [deleteId, setDeleteId] = useState('')
 
   const categoryOptions = categoryList.map(({ name, value }) => ({
     name,
@@ -123,13 +136,15 @@ const Article = () => {
   }
 
   useEffect(() => {
+    // clear edit info when close modal
+    if (!isModalTemplateOpen) setEditInfo({})
+  }, [isModalTemplateOpen])
+
+  useEffect(() => {
     getIntroList()
   }, [categoryList, searchCondition])
 
   function getIntroList(order = "desc") {
-    // clear edit info when get new intro list
-    setEditInfo({})
-    console.log(searchCondition)
     getArticle({ order, ...searchCondition })
       .then(res => {
         setTableData(
@@ -153,10 +168,12 @@ const Article = () => {
     if (type === "edit") {
       getArticle({ id }).then(res => {
         setEditInfo(res.data.articles[0])
-        onOpen()
+        onModalTemplateOpen()
       })
+    } else {
+      setDeleteId(id)
+      onDeleteComfirmOpen()
     }
-    console.log(type, id)
   }
 
   return (
@@ -178,7 +195,7 @@ const Article = () => {
           size="sm"
           variant="outline"
           borderColor={useColorModeValue("gray.700", "gray.200")}
-          onClick={onOpen}
+          onClick={onModalTemplateOpen}
           leftIcon={<MdAdd />}
         >
           Creat Article
@@ -197,13 +214,35 @@ const Article = () => {
         />
       </Flex>
       <ModalTemplate
-        isOpen={isOpen}
-        onClose={onClose}
+        isOpen={isModalTemplateOpen}
+        onClose={onModalTemplateClose}
         categoryList={categoryOptions}
         statusList={statusOptions}
         refetchData={getIntroList}
         editData={editInfo}
       />
+      <Modal
+        size="md"
+        title="Comfirm Delete?"
+        isOpen={isDeleteComfirmOpen}
+        onClose={() => {
+          setDeleteId('')
+          onDeleteComfirmClose()
+        }}
+        submitText="Comfirm"
+        onSubmit={(e) => {
+          e.preventDefault();
+          deleteArticle(deleteId).then(() => {
+            getIntroList()
+          }).finally(() => { 
+            setDeleteId('')
+          onDeleteComfirmClose()
+          })
+        }}
+      >
+        <FiAlertCircle fontSize={64} color="#E53E3E" />
+        <Text fontSize={24}>Can't be recovered after deletion</Text> 
+      </Modal>
     </Box>
   )
 }
