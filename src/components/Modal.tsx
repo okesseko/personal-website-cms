@@ -18,7 +18,18 @@ interface ModalProps {
   submitText?: string
   children: ReactNode
   onSubmit: (val: any) => void
-  size?:"4xl" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "5xl" | "6xl" | "full"
+  size?:
+    | "4xl"
+    | "xs"
+    | "sm"
+    | "md"
+    | "lg"
+    | "xl"
+    | "2xl"
+    | "3xl"
+    | "5xl"
+    | "6xl"
+    | "full"
 }
 
 const Modal = ({
@@ -28,7 +39,7 @@ const Modal = ({
   submitText = "submit",
   children,
   onSubmit,
-  size="4xl"
+  size = "4xl",
 }: ModalProps) => {
   return (
     <ModalChakra isOpen={isOpen} onClose={onClose} size={size}>

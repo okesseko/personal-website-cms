@@ -6,7 +6,7 @@ import {
   Select,
   useColorModeValue,
 } from "@chakra-ui/react"
-import React, { useEffect, useMemo, useRef } from "react"
+import { useEffect, useMemo } from "react"
 import { FieldValues, useForm, UseFormSetValue } from "react-hook-form"
 import FileUpload from "../../components/FileUpload"
 import Modal from "../../components/Modal"
@@ -109,7 +109,7 @@ const ModalTemplate = ({
         defaultValue: watchContent,
       },
     ],
-    [register, watchContent,categoryList]
+    [register, watchContent, categoryList]
   )
 
   const uploadImageUrl = () => {
@@ -136,10 +136,8 @@ const ModalTemplate = ({
 
   useEffect(() => {
     Object.entries(editData).forEach(([key, val]) => {
-      if(key==='releaseTime')
-        setValue(key, dayjs(val).format('YYYY-MM-DD'))
-      else 
-        setValue(key,val)
+      if (key === "releaseTime") setValue(key, dayjs(val).format("YYYY-MM-DD"))
+      else setValue(key, val)
     })
   }, [editData])
 

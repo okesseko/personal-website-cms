@@ -2,14 +2,12 @@ import {
   Box,
   Button,
   Flex,
-  Input,
-  Select,
   Text,
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react"
-import React, { useEffect, useRef, useState } from "react"
-import { getArticle, getCategory,deleteArticle } from "../../api"
+import { useEffect, useState } from "react"
+import { getArticle, getCategory, deleteArticle } from "../../api"
 import Modal from "../../components/Modal"
 import Pagination from "../../components/Pagination"
 import SearchForm, { FieldProps } from "../../components/SearchForm"
@@ -18,7 +16,6 @@ import getCategoryInfo from "../../utils/getCategoryInfo"
 import { MdAdd } from "react-icons/md"
 import { FiAlertCircle } from "react-icons/fi"
 import ModalTemplate from "./ModalTemplate"
-
 
 const TABLE_HEADER: TableHeaderProps[] = [
   {
@@ -64,19 +61,19 @@ const TABLE_HEADER: TableHeaderProps[] = [
   },
 ]
 
-const STATUS = ["Hidden", "Visiable"]
+const STATUS = ["Hidden", "Visible"]
 
 const Article = () => {
   const {
     isOpen: isModalTemplateOpen,
     onOpen: onModalTemplateOpen,
-    onClose: onModalTemplateClose
+    onClose: onModalTemplateClose,
   } = useDisclosure()
 
-   const {
-    isOpen: isDeleteComfirmOpen,
-    onOpen: onDeleteComfirmOpen,
-    onClose: onDeleteComfirmClose
+  const {
+    isOpen: isDeleteConfirmOpen,
+    onOpen: onDeleteConfirmOpen,
+    onClose: onDeleteConfirmClose,
   } = useDisclosure()
 
   const [categoryList, setCategoryList] = useState<
@@ -88,7 +85,7 @@ const Article = () => {
   const [tableData, setTableData] = useState<TableDataProps[]>([])
   const [totalSize, setTotalSize] = useState(0)
   const [editInfo, setEditInfo] = useState({})
-  const [deleteId, setDeleteId] = useState('')
+  const [deleteId, setDeleteId] = useState("")
 
   const categoryOptions = categoryList.map(({ name, value }) => ({
     name,
@@ -172,7 +169,7 @@ const Article = () => {
       })
     } else {
       setDeleteId(id)
-      onDeleteComfirmOpen()
+      onDeleteConfirmOpen()
     }
   }
 
@@ -208,8 +205,8 @@ const Article = () => {
         <Pagination
           page={searchCondition.page as number}
           totalSize={totalSize}
-          onPageChange={chagedPage =>
-            setSearchCondition({ ...searchCondition, page: chagedPage })
+          onPageChange={changedPage =>
+            setSearchCondition({ ...searchCondition, page: changedPage })
           }
         />
       </Flex>
@@ -224,24 +221,26 @@ const Article = () => {
       <Modal
         size="md"
         title="Comfirm Delete?"
-        isOpen={isDeleteComfirmOpen}
+        isOpen={isDeleteConfirmOpen}
         onClose={() => {
-          setDeleteId('')
-          onDeleteComfirmClose()
+          setDeleteId("")
+          onDeleteConfirmClose()
         }}
         submitText="Comfirm"
-        onSubmit={(e) => {
-          e.preventDefault();
-          deleteArticle(deleteId).then(() => {
-            getIntroList()
-          }).finally(() => { 
-            setDeleteId('')
-          onDeleteComfirmClose()
-          })
+        onSubmit={e => {
+          e.preventDefault()
+          deleteArticle(deleteId)
+            .then(() => {
+              getIntroList()
+            })
+            .finally(() => {
+              setDeleteId("")
+              onDeleteConfirmClose()
+            })
         }}
       >
         <FiAlertCircle fontSize={64} color="#E53E3E" />
-        <Text fontSize={24}>Can't be recovered after deletion</Text> 
+        <Text fontSize={24}>Can't be recovered after deletion</Text>
       </Modal>
     </Box>
   )
