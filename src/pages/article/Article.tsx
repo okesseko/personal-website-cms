@@ -81,7 +81,7 @@ const Article = () => {
   >([])
   const [searchCondition, setSearchCondition] = useState<{
     [key: string]: string | number
-  }>({ page: 1 })
+  }>({ page: 1, limit: 10 })
   const [tableData, setTableData] = useState<TableDataProps[]>([])
   const [totalSize, setTotalSize] = useState(0)
   const [editInfo, setEditInfo] = useState({})
@@ -127,8 +127,11 @@ const Article = () => {
   }, [])
 
   function getCategoryList() {
-    getCategory()
-      .then(res => setCategoryList(res.data))
+    getCategory({ isGetAll: true })
+      .then(res => {
+        console.log(res.data)
+        setCategoryList(res.data.categories)
+      })
       .catch(err => console.error(err))
   }
 
@@ -195,7 +198,7 @@ const Article = () => {
           onClick={onModalTemplateOpen}
           leftIcon={<MdAdd />}
         >
-          Creat Article
+          Create Article
         </Button>
         <Table
           tableHeader={TABLE_HEADER}
