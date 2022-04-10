@@ -6,7 +6,7 @@ import Header from "./components/Header";
 import SimpleSidebar from "./components/Siderbar";
 import { BrowserRouter, Route, Outlet, Routes, Navigate } from "react-router-dom";
 import Article from "./pages/article/Article";
-import Category from "./pages/Category";
+import Category from "./pages/Category/Category";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import Account from "./pages/Account";
