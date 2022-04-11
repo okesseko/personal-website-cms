@@ -43,4 +43,33 @@ const getCategory = params =>
     url: "/category",
   })
 
-export { getArticle, postArticle, patchArticle, deleteArticle, getCategory }
+const postCategory = body =>
+  defaultRequest({
+    data: body,
+    method: "post",
+    url: "/category",
+  })
+
+const patchCategory = (id, body) =>
+  defaultRequest({
+    data: body,
+    method: "patch",
+    url: `/category/${id}`,
+  })
+
+const deleteCategory = id =>
+  defaultRequest({
+    method: "delete",
+    url: `/category/${id}`,
+  })
+
+export {
+  getArticle,
+  postArticle,
+  patchArticle,
+  deleteArticle,
+  getCategory,
+  postCategory,
+  patchCategory,
+  deleteCategory,
+}
