@@ -13,6 +13,7 @@ import {
 } from "@chakra-ui/react"
 
 import React from "react"
+import { MdAdd } from "react-icons/md"
 import { useForm } from "react-hook-form"
 
 interface FieldProps {
@@ -27,9 +28,17 @@ interface SearchFormProps {
   defaultValue: { [key: string]: string | number }
   fields: FieldProps[]
   onSubmit: (val: any) => void
+  onCreateClick: () => void
+  createTitle: string
 }
 
-const SearchForm = ({ defaultValue, fields, onSubmit }: SearchFormProps) => {
+const SearchForm = ({
+  defaultValue,
+  fields,
+  onSubmit,
+  onCreateClick,
+  createTitle,
+}: SearchFormProps) => {
   const {
     handleSubmit,
     register,
@@ -76,13 +85,23 @@ const SearchForm = ({ defaultValue, fields, onSubmit }: SearchFormProps) => {
           </FormControl>
         ))}
       </Stack>
-      <HStack margin="10px 0" justify="flex-end">
-        <Button type="submit" disabled={isSubmitting} colorScheme="blue">
-          Search
+      <HStack margin="16px 0" justify="space-between">
+        <Button
+          variant="outline"
+          borderColor={useColorModeValue("gray.700", "gray.200")}
+          onClick={onCreateClick}
+          leftIcon={<MdAdd />}
+        >
+          {createTitle}
         </Button>
-        <Button type="reset" colorScheme="blue" variant="outline">
-          Clear
-        </Button>
+        <HStack>
+          <Button type="submit" disabled={isSubmitting} colorScheme="blue">
+            Search
+          </Button>
+          <Button type="reset" colorScheme="blue" variant="outline">
+            Clear
+          </Button>
+        </HStack>
       </HStack>
     </form>
   )

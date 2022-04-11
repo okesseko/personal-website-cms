@@ -189,17 +189,9 @@ const Article = () => {
           onSubmit={val =>
             setSearchCondition({ page: searchCondition.page, ...val })
           }
+          onCreateClick={onModalTemplateOpen}
+          createTitle="Create Article"
         />
-        <Button
-          width="fit-content"
-          size="sm"
-          variant="outline"
-          borderColor={useColorModeValue("gray.700", "gray.200")}
-          onClick={onModalTemplateOpen}
-          leftIcon={<MdAdd />}
-        >
-          Create Article
-        </Button>
         <Table
           tableHeader={TABLE_HEADER}
           tableData={tableData}
