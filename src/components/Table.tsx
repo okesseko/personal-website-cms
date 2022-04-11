@@ -79,7 +79,7 @@ const Table = ({ tableData, tableHeader, onActionClick }: TableProps) => {
             </Td>
           )
         })}
-        <Td>
+        <Td textAlign="center">
           <IconButton
             borderRadius="50%"
             marginRight="8px"
@@ -102,6 +102,7 @@ const Table = ({ tableData, tableHeader, onActionClick }: TableProps) => {
     <TableContainer
       flexGrow={1}
       css={{
+        overflow: "auto",
         "&::-webkit-scrollbar": {
           width: "6px",
           height: "6px",
@@ -113,10 +114,19 @@ const Table = ({ tableData, tableHeader, onActionClick }: TableProps) => {
       }}
     >
       <TableChakra variant="simple" colorScheme="telegram">
-        <Thead>
+        <Thead
+          position="sticky"
+          top="0"
+          backgroundColor={useColorModeValue("gray.200", "gray.700")}
+          zIndex="10"
+        >
           <Tr>
             {tableHeader.map(({ type, key, title }) => (
-              <Th key={key} isNumeric={type === "number"}>
+              <Th
+                key={key}
+                isNumeric={type === "number"}
+                {...(type === "image" && { textAlign: "center" })}
+              >
                 {title}
               </Th>
             ))}
