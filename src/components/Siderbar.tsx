@@ -1,13 +1,13 @@
-import  { ReactNode, ReactText } from "react";
-import { IconType } from "react-icons";
-import { FiSettings } from "react-icons/fi";
+import { ReactNode, ReactText } from "react"
+import { IconType } from "react-icons"
+import { FiSettings } from "react-icons/fi"
 import {
   MdOutlineArticle,
   MdOutlineAccountCircle,
   MdOutlineDashboard,
   MdLogout,
-} from "react-icons/md";
-import { NavLink } from "react-router-dom";
+} from "react-icons/md"
+import { NavLink, useNavigate } from "react-router-dom"
 
 import {
   Box,
@@ -17,22 +17,23 @@ import {
   Icon,
   useColorModeValue,
   useDisclosure,
-} from "@chakra-ui/react";
+} from "@chakra-ui/react"
+import { clearAuthHeader } from "../api"
 
 interface LinkItemProps {
-  name: string;
-  icon: IconType;
-  href: string;
+  name: string
+  icon: IconType
+  href: string
 }
 const LinkItems: Array<LinkItemProps> = [
   { name: "Article", icon: MdOutlineArticle, href: "article" },
   { name: "Category", icon: MdOutlineDashboard, href: "category" },
   { name: "Account", icon: MdOutlineAccountCircle, href: "account" },
   { name: "Settings", icon: FiSettings, href: "setting" },
-];
+]
 
 export default function SimpleSidebar({ children }: { children: ReactNode }) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <Box
       minH="calc(100vh - 65px)"
@@ -43,14 +44,15 @@ export default function SimpleSidebar({ children }: { children: ReactNode }) {
         {children}
       </Box>
     </Box>
-  );
+  )
 }
 
 interface SidebarProps extends BoxProps {
-  onClose: () => void;
+  onClose: () => void
 }
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
+  const navigate = useNavigate()
   return (
     <Box
       bg={useColorModeValue("white", "gray.900")}
@@ -63,7 +65,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
     >
       <Flex direction="column" height="100%" justifyContent="space-between">
         <Box>
-          {LinkItems.map((link) => (
+          {LinkItems.map(link => (
             <NavItem key={link.name} icon={link.icon} href={link.href}>
               {link.name}
             </NavItem>
@@ -76,23 +78,27 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
             bg: "gray.400",
             color: "white",
           }}
+          onClick={() => {
+            clearAuthHeader()
+            navigate("/")
+          }}
         >
           Logout
         </NavItem>
       </Flex>
     </Box>
-  );
-};
+  )
+}
 
 interface NavItemProps extends FlexProps {
-  icon: IconType;
-  children: ReactText;
-  href: string;
+  icon: IconType
+  children: ReactText
+  href: string
 }
 const NavItem = ({ icon, children, href, ...rest }: NavItemProps) => {
   function isNavItemSelected({ isActive }: { isActive: boolean }): string {
-    if (isActive) return "active";
-    return "";
+    if (isActive) return "active"
+    return ""
   }
 
   return (
@@ -124,5 +130,5 @@ const NavItem = ({ icon, children, href, ...rest }: NavItemProps) => {
         {children}
       </Flex>
     </NavLink>
-  );
-};
+  )
+}
