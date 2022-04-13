@@ -7,6 +7,31 @@ const defaultRequest = axios.create({
   },
 })
 
+const setAuthHeader = token => {
+  defaultRequest.defaults.headers.common["Authorization"] = `Bearer ${token}`
+  window.sessionStorage.setItem("token", token)
+}
+
+const getAuthHeader = () => {
+  return !!(
+    defaultRequest.defaults.headers.common["Authorization"] ||
+    window.sessionStorage.getItem("token")
+  )
+}
+
+const clearAuthHeader = () => {
+  delete defaultRequest.defaults.headers.common["Authorization"] 
+  window.sessionStorage.removeItem("token")
+}
+
+// login
+const loginAccount = body =>
+  defaultRequest({
+    data: body,
+    method: "post",
+    url: "/login",
+  })
+
 // article
 const getArticle = params =>
   defaultRequest({
@@ -64,6 +89,10 @@ const deleteCategory = id =>
   })
 
 export {
+  setAuthHeader,
+  getAuthHeader,
+  clearAuthHeader,
+  loginAccount,
   getArticle,
   postArticle,
   patchArticle,
