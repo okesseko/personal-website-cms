@@ -9,22 +9,49 @@ import {
   InputLeftElement,
   chakra,
   Box,
-  Link,
   Avatar,
   FormControl,
-  FormHelperText,
   InputRightElement,
   useColorModeValue,
+  FormErrorMessage,
+  AlertIcon,
+  Alert,
 } from "@chakra-ui/react"
 import { FaUserAlt, FaLock } from "react-icons/fa"
+import { useForm } from "react-hook-form"
+
+import { loginAccount, setAuthHeader } from "../api"
+import { useNavigate } from "react-router-dom"
 
 const CFaUserAlt = chakra(FaUserAlt)
 const CFaLock = chakra(FaLock)
 
 const Login = () => {
+  const {
+    handleSubmit,
+    register,
+    reset,
+    formState: { errors },
+  } = useForm({})
+  const navigate = useNavigate()
+
   const [showPassword, setShowPassword] = useState(false)
+  const [errorMsg, setErrorMsg] = useState("")
 
   const handleShowClick = () => setShowPassword(!showPassword)
+  const clearErrorMsg = () => setErrorMsg("")
+
+  const login = (value: any) => {
+    loginAccount(value)
+      .then(res => {
+        setAuthHeader(res.data.token)
+        navigate('/')
+      })
+      .catch(err => {
+        setErrorMsg(err.response.data)
+        reset()
+      })
+  }
 
   return (
     <Flex
@@ -46,7 +73,7 @@ const Login = () => {
           Welcome
         </Heading>
         <Box minW={{ base: "90%", md: "468px" }}>
-          <form>
+          <form onSubmit={handleSubmit(login)} onChange={clearErrorMsg}>
             <Stack
               spacing={4}
               p="1rem"
@@ -54,16 +81,24 @@ const Login = () => {
               boxShadow="md"
               borderRadius="8px"
             >
-              <FormControl>
+              <FormControl isInvalid={errors.account}>
                 <InputGroup>
                   <InputLeftElement
                     pointerEvents="none"
                     children={<CFaUserAlt color="gray.300" />}
                   />
-                  <Input placeholder="account" />
+                  <Input
+                    placeholder="account"
+                    {...register("account", {
+                      required: "Please input account",
+                    })}
+                  />
                 </InputGroup>
+                <FormErrorMessage>
+                  {errors.account && errors.account.message}
+                </FormErrorMessage>
               </FormControl>
-              <FormControl>
+              <FormControl isInvalid={errors.password}>
                 <InputGroup>
                   <InputLeftElement
                     pointerEvents="none"
@@ -73,18 +108,26 @@ const Login = () => {
                   <Input
                     type={showPassword ? "text" : "password"}
                     placeholder="Password"
+                    {...register("password", {
+                      required: "Please input password",
+                    })}
                   />
                   <InputRightElement width="4.5rem">
                     <Button
                       h="1.75rem"
                       size="sm"
                       onClick={handleShowClick}
-                      color="black"
+                      color="white"
+                      backgroundColor="gray.700"
+                      _hover={{ backgroundColor: "gray.700" }}
                     >
                       {showPassword ? "Hide" : "Show"}
                     </Button>
                   </InputRightElement>
                 </InputGroup>
+                <FormErrorMessage>
+                  {errors.password && errors.password.message}
+                </FormErrorMessage>
               </FormControl>
               <Box marginTop="48px !important">
                 <Button
@@ -100,6 +143,10 @@ const Login = () => {
             </Stack>
           </form>
         </Box>
+        <Alert status="error" visibility={errorMsg ? "visible" : "hidden"}>
+          <AlertIcon />
+          {errorMsg}
+        </Alert>
       </Stack>
     </Flex>
   )
