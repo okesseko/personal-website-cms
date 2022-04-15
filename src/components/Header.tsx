@@ -1,7 +1,8 @@
-import { Box, Flex, useColorModeValue } from '@chakra-ui/react';
+import { Box, Flex, Image, useColorModeValue } from "@chakra-ui/react"
 
-import { ColorModeSwitcher } from './ColorModeSwitcher';
-import { Link } from 'react-router-dom';
+import { ColorModeSwitcher } from "./ColorModeSwitcher"
+import { Link } from "react-router-dom"
+import Logo from "../images/logo.png"
 
 const Header = () => {
   return (
@@ -15,12 +16,14 @@ const Header = () => {
     >
       <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
         <Box>
-          <Link to="/">Logo</Link>
+          <Link to="/">
+            <Image src={Logo} width='40' />
+          </Link>
         </Box>
         <ColorModeSwitcher justifySelf="flex-end" />
       </Flex>
     </Box>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header
