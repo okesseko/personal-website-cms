@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@chakra-ui/react": "^1.8.7",
+    "@craco/craco": "^6.4.3",
     "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11.8.1",
     "@testing-library/jest-dom": "^5.16.3",
@@ -29,10 +30,10 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "craco  start",
+    "build": "craco  build",
+    "test": "craco  test",
+    "eject": "craco  eject"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -48,5 +49,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "craco-alias": "^3.0.1"
   }
 }
