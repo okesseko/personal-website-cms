@@ -28,8 +28,11 @@ interface LinkItemProps {
 const LinkItems: Array<LinkItemProps> = [
   { name: "Article", icon: MdOutlineArticle, href: "article" },
   { name: "Category", icon: MdOutlineDashboard, href: "category" },
-  { name: "Account", icon: MdOutlineAccountCircle, href: "account" },
-  { name: "Settings", icon: FiSettings, href: "setting" },
+  {
+    name: "Change Password",
+    icon: MdOutlineAccountCircle,
+    href: "change-password",
+  },
 ]
 
 export default function SimpleSidebar({ children }: { children: ReactNode }) {
@@ -64,7 +67,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       {...rest}
     >
       <Flex direction="column" height="100%" justifyContent="space-between">
-        <Box>
+        <Box textAlign="left">
           {LinkItems.map(link => (
             <NavItem key={link.name} icon={link.icon} href={link.href}>
               {link.name}
