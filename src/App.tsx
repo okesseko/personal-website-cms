@@ -10,17 +10,15 @@ import {
   Outlet,
   Routes,
   Navigate,
-  PathRouteProps,
 } from "react-router-dom"
 import Article from "./pages/article/Article"
 import Category from "./pages/Category/Category"
 import Login from "./pages/Login"
 import NotFound from "./pages/NotFound"
-import Account from "./pages/Account"
+import Account from "./pages/ChangePassword"
 import { getAuthHeader } from "./api"
 
 export const App = () => {
-  
   const PrivateRootRouter = () => {
     const isLogin = getAuthHeader()
     return isLogin ? (
@@ -45,7 +43,7 @@ export const App = () => {
             <Route path="" element={<Navigate to="/article" replace />} />
             <Route path="/article" element={<Article />} />
             <Route path="/category" element={<Category />} />
-            <Route path="/account" element={<Account />} />
+            <Route path="/change-password" element={<Account />} />
           </Route>
 
           <Route path="/login" element={<Login />} />
