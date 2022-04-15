@@ -20,7 +20,7 @@ const getAuthHeader = () => {
 }
 
 const clearAuthHeader = () => {
-  delete defaultRequest.defaults.headers.common["Authorization"] 
+  delete defaultRequest.defaults.headers.common["Authorization"]
   window.sessionStorage.removeItem("token")
 }
 
@@ -30,6 +30,21 @@ const loginAccount = body =>
     data: body,
     method: "post",
     url: "/login",
+  })
+
+// user
+const getUser = params =>
+  defaultRequest({
+    params,
+    method: "get",
+    url: "/user",
+  })
+
+const patchUser = (id, body) =>
+  defaultRequest({
+    data: body,
+    method: "patch",
+    url: `/user/${id}`,
   })
 
 // article
@@ -93,6 +108,8 @@ export {
   getAuthHeader,
   clearAuthHeader,
   loginAccount,
+  getUser,
+  patchUser,
   getArticle,
   postArticle,
   patchArticle,
