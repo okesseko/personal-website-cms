@@ -1,3 +1,7 @@
+import { useEffect, useMemo } from "react"
+import { FieldValues, useForm, UseFormSetValue } from "react-hook-form"
+import ReactQuill from "react-quill"
+
 import {
   FormControl,
   FormErrorMessage,
@@ -6,16 +10,17 @@ import {
   Select,
   useColorModeValue,
 } from "@chakra-ui/react"
-import { useEffect, useMemo } from "react"
-import { FieldValues, useForm, UseFormSetValue } from "react-hook-form"
-import FileUpload from "../../components/FileUpload"
-import Modal from "../../components/Modal"
-import convertImageToBase64 from "../../utils/convertImageToBase64"
-import { postArticle, patchArticle } from "../../api"
-import ReactQuill from "react-quill"
+import dayjs from "dayjs"
+
+import { patchArticle, postArticle } from "@Api/index"
+
+import FileUpload from "@Components/FileUpload"
+import Modal from "@Components/Modal"
+
+import convertImageToBase64 from "@Utils/convertImageToBase64"
+
 import "react-quill/dist/quill.snow.css"
 import "./modalTemplate.css"
-import dayjs from "dayjs"
 interface ModalTemplateProps {
   isOpen: boolean
   onClose: () => void

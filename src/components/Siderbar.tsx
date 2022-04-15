@@ -1,10 +1,10 @@
 import { ReactNode, ReactText } from "react"
 import { IconType } from "react-icons"
 import {
-  MdOutlineArticle,
-  MdOutlineAccountCircle,
-  MdOutlineDashboard,
   MdLogout,
+  MdOutlineAccountCircle,
+  MdOutlineArticle,
+  MdOutlineDashboard,
 } from "react-icons/md"
 import { NavLink, useNavigate } from "react-router-dom"
 
@@ -17,7 +17,8 @@ import {
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react"
-import { clearAuthHeader } from "../api"
+
+import { clearAuthHeader } from "@Api/index"
 
 interface LinkItemProps {
   name: string

@@ -1,3 +1,6 @@
+import { useForm } from "react-hook-form"
+import { MdAdd } from "react-icons/md"
+
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
   Button,
@@ -9,9 +12,6 @@ import {
   Stack,
   useColorModeValue,
 } from "@chakra-ui/react"
-
-import { MdAdd } from "react-icons/md"
-import { useForm } from "react-hook-form"
 
 interface FieldProps {
   title: string

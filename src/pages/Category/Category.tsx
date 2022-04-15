@@ -1,16 +1,15 @@
-import {
-  Box,
-  Flex,
-  Text,
-  useDisclosure,
-} from "@chakra-ui/react"
 import { useEffect, useState } from "react"
-import { getCategory, deleteCategory } from "../../api"
-import Modal from "../../components/Modal"
-import Pagination from "../../components/Pagination"
-import SearchForm, { FieldProps } from "../../components/SearchForm"
-import Table, { TableDataProps, TableHeaderProps } from "../../components/Table"
 import { FiAlertCircle } from "react-icons/fi"
+
+import { Box, Flex, Text, useDisclosure } from "@chakra-ui/react"
+
+import { deleteCategory, getCategory } from "@Api/index"
+
+import Modal from "@Components/Modal"
+import Pagination from "@Components/Pagination"
+import SearchForm, { FieldProps } from "@Components/SearchForm"
+import Table, { TableDataProps, TableHeaderProps } from "@Components/Table"
+
 import ModalTemplate from "./ModalTemplate"
 
 const TABLE_HEADER: TableHeaderProps[] = [

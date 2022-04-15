@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
+
 import {
   Alert,
   AlertIcon,
@@ -14,9 +17,8 @@ import {
   Stack,
   useColorModeValue,
 } from "@chakra-ui/react"
-import { useEffect, useState } from "react"
-import { useForm } from "react-hook-form"
-import { patchUser, getUser } from "../api"
+
+import { getUser, patchUser } from "@Api/index"
 
 const ChangePassword = () => {
   const {

@@ -1,8 +1,9 @@
-import { Box, Flex, Text } from "@chakra-ui/react"
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md"
 import ReactPaginate from "react-paginate"
-import "./pagination.css"
 
+import { Box, Flex, Text } from "@chakra-ui/react"
+
+import "./pagination.css"
 interface PaginationProps {
   page: number
   totalSize: number

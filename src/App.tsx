@@ -1,20 +1,17 @@
-import { Box, ChakraProvider, theme } from "@chakra-ui/react"
+import { BrowserRouter, Navigate, Outlet, Route, Routes } from "react-router-dom";
 
-import Header from "./components/Header"
-import SimpleSidebar from "./components/Siderbar"
-import {
-  BrowserRouter,
-  Route,
-  Outlet,
-  Routes,
-  Navigate,
-} from "react-router-dom"
-import Article from "./pages/article/Article"
-import Category from "./pages/Category/Category"
-import Login from "./pages/Login"
-import NotFound from "./pages/NotFound"
-import Account from "./pages/ChangePassword"
-import { getAuthHeader } from "./api"
+import { Box, ChakraProvider, theme } from "@chakra-ui/react";
+
+import { getAuthHeader } from "@Api/index";
+
+import Article from "@Pages/article/Article";
+import Category from "@Pages/Category/Category";
+import Account from "@Pages/ChangePassword";
+import Login from "@Pages/Login";
+import NotFound from "@Pages/NotFound";
+
+import Header from "@Components/Header";
+import SimpleSidebar from "@Components/Siderbar";
 
 export const App = () => {
   const PrivateRootRouter = () => {

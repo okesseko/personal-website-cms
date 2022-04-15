@@ -1,20 +1,20 @@
+import { MdEdit, MdOutlineDeleteOutline } from "react-icons/md"
+
 import {
+  IconButton,
+  Image,
   Table as TableChakra,
+  TableCellProps,
   TableContainer,
   Tbody,
   Td,
-  TableCellProps,
+  Text,
   Th,
   Thead,
-  Image,
   Tr,
-  Text,
   useColorModeValue,
-  IconButton,
 } from "@chakra-ui/react"
 import dayjs from "dayjs"
-
-import { MdEdit, MdOutlineDeleteOutline } from "react-icons/md"
 
 interface TableHeaderProps {
   type: "string" | "number" | "time" | "image"

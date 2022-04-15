@@ -1,27 +1,28 @@
 import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { FaLock, FaUserAlt } from "react-icons/fa"
+import { useNavigate } from "react-router-dom"
+
 import {
+  Alert,
+  AlertIcon,
+  Avatar,
+  Box,
+  Button,
+  chakra,
   Flex,
+  FormControl,
+  FormErrorMessage,
   Heading,
   Input,
-  Button,
   InputGroup,
-  Stack,
   InputLeftElement,
-  chakra,
-  Box,
-  Avatar,
-  FormControl,
   InputRightElement,
+  Stack,
   useColorModeValue,
-  FormErrorMessage,
-  AlertIcon,
-  Alert,
 } from "@chakra-ui/react"
-import { FaUserAlt, FaLock } from "react-icons/fa"
-import { useForm } from "react-hook-form"
 
-import { loginAccount, setAuthHeader } from "../api"
-import { useNavigate } from "react-router-dom"
+import { loginAccount, setAuthHeader } from "@Api/index"
 
 const CFaUserAlt = chakra(FaUserAlt)
 const CFaLock = chakra(FaLock)
@@ -45,7 +46,7 @@ const Login = () => {
     loginAccount(value)
       .then(res => {
         setAuthHeader(res.data.token)
-        navigate('/')
+        navigate("/")
       })
       .catch(err => {
         setErrorMsg(err.response.data)

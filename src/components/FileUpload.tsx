@@ -1,17 +1,18 @@
+import { useRef } from "react"
+import { UseFormRegisterReturn } from "react-hook-form"
+import { FiFile } from "react-icons/fi"
+import { MdOutlineDeleteOutline } from "react-icons/md"
+
 import {
   Button,
   FormControl,
   FormErrorMessage,
   FormLabel,
+  Image,
   InputGroup,
   Text,
-  Image,
   VStack,
 } from "@chakra-ui/react"
-import { useRef } from "react"
-import { UseFormRegisterReturn } from "react-hook-form"
-import { FiFile } from "react-icons/fi"
-import { MdOutlineDeleteOutline } from "react-icons/md"
 
 interface FileUploadProps {
   register: UseFormRegisterReturn

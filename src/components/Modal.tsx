@@ -1,15 +1,16 @@
+import { ReactNode } from "react"
+
 import {
-  ModalOverlay,
-  Modal as ModalChakra,
-  ModalContent,
   Button,
+  Modal as ModalChakra,
   ModalBody,
   ModalCloseButton,
+  ModalContent,
   ModalFooter,
   ModalHeader,
+  ModalOverlay,
   VStack,
 } from "@chakra-ui/react"
-import { ReactNode } from "react"
 
 interface ModalProps {
   isOpen: boolean

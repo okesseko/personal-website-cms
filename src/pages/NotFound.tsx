@@ -1,5 +1,6 @@
-import { Flex, Button, Text } from "@chakra-ui/react"
 import { Link } from "react-router-dom"
+
+import { Button, Flex, Text } from "@chakra-ui/react"
 
 const NotFound = () => {
   return (

@@ -1,0 +1,53 @@
+{
+  "generalConfiguration.sortOnBeforeSave": true,
+  "importStringConfiguration.maximumNumberOfImportExpressionsPerLine.type": "newLineEachExpressionAfterCountLimitExceptIfOnlyOne",
+  "importStringConfiguration.maximumNumberOfImportExpressionsPerLine.count": 100,
+  "importStringConfiguration.tabSize": 2,
+  "importStringConfiguration.quoteMark": "double",
+  "sortConfiguration.customOrderingRules.defaultNumberOfEmptyLinesAfterGroup": 1,
+  "importSorter.sortConfiguration.customOrderingRules.defaultOrderLevel": 20,
+  "importSorter.sortConfiguration.customOrderingRules.rules": [
+    {
+      "type": "importMember",
+      "regex": "^$",
+      "orderLevel": 10,
+      "disableSort": true
+    },
+    {
+      "regex": "^react",
+      "orderLevel": 10
+    },
+    {
+      "regex": "^@chakra-ui",
+      "orderLevel": 20
+    },
+    {
+      "regex": "^@Api",
+      "orderLevel": 30
+    },
+    {
+      "regex": "^@Pages",
+      "orderLevel": 40
+    },
+    {
+      "regex": "^@Components",
+      "orderLevel": 50
+    },
+    {
+      "regex": "^@Images",
+      "orderLevel": 60
+    },
+    {
+      "regex": "^@Utils",
+      "orderLevel": 70
+    },
+    {
+      "regex": "^@Test",
+      "orderLevel": 80
+    },
+    {
+      "regex": "^[.]",
+      "orderLevel": 90
+    }
+  ]
+}
