@@ -6,10 +6,9 @@ import {
   InputGroup,
   Text,
   Image,
-  HStack,
   VStack,
 } from "@chakra-ui/react"
-import { ReactNode, useRef } from "react"
+import { useRef } from "react"
 import { UseFormRegisterReturn } from "react-hook-form"
 import { FiFile } from "react-icons/fi"
 import { MdOutlineDeleteOutline } from "react-icons/md"

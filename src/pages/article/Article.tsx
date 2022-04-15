@@ -1,9 +1,7 @@
 import {
   Box,
-  Button,
   Flex,
   Text,
-  useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
@@ -13,7 +11,6 @@ import Pagination from "../../components/Pagination"
 import SearchForm, { FieldProps } from "../../components/SearchForm"
 import Table, { TableDataProps, TableHeaderProps } from "../../components/Table"
 import getCategoryInfo from "../../utils/getCategoryInfo"
-import { MdAdd } from "react-icons/md"
 import { FiAlertCircle } from "react-icons/fi"
 import ModalTemplate from "./ModalTemplate"
 

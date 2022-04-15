@@ -1,8 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
-  Box,
   Button,
-  Flex,
   FormControl,
   FormLabel,
   HStack,
@@ -12,7 +10,6 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react"
 
-import React from "react"
 import { MdAdd } from "react-icons/md"
 import { useForm } from "react-hook-form"
 

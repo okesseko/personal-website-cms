@@ -1,5 +1,3 @@
-import React from 'react';
-
 import {
     chakra, forwardRef, ImageProps, keyframes, usePrefersReducedMotion
 } from '@chakra-ui/react';

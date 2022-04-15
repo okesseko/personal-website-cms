@@ -1,6 +1,4 @@
-import React from 'react';
-
-import { Avatar, Box, Flex, Stack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Flex, useColorModeValue } from '@chakra-ui/react';
 
 import { ColorModeSwitcher } from './ColorModeSwitcher';
 import { Link } from 'react-router-dom';

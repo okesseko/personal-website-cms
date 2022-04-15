@@ -1,6 +1,5 @@
 import { ReactNode, ReactText } from "react"
 import { IconType } from "react-icons"
-import { FiSettings } from "react-icons/fi"
 import {
   MdOutlineArticle,
   MdOutlineAccountCircle,
@@ -36,7 +35,7 @@ const LinkItems: Array<LinkItemProps> = [
 ]
 
 export default function SimpleSidebar({ children }: { children: ReactNode }) {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { onClose } = useDisclosure()
   return (
     <Box
       minH="calc(100vh - 65px)"
