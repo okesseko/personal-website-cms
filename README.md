@@ -1,59 +1,43 @@
-This project was bootstrapped with
-[Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
 
-In the project directory, you can run:
+# Personal Website CMS
+### This project is a **Content Management System (CMS)** for my personal website project
+<br/>
 
-### `npm start`
+![banner](/docs/banner.png)
 
-Runs the app in the development mode.<br /> Open
-[http://localhost:3000](http://localhost:3000) to view it in the browser.
+# About `Personal Website Project`
+It is a full-stack personal website system, consisting of project three elements **Main Website**, **Backend Server** and **Content Management System**
 
-The page will reload if you make edits.<br /> You will also see any lint errors
-in the console.
+Your can click blew link to get more info 
+### Main Website: [Personal Website Dcard](https://github.com/okesseko/personal-website-dcard)
+### Backend Server: [Personal Website Backend](https://github.com/okesseko/personal-website-backend)
 
-### `npm test`
+# Getting Started
+Firstly, you will need to clone the repo locally. Once you have it ready navigate into the directory and run the following commands:
 
-Launches the test runner in the interactive watch mode.<br /> See the section
-about
-[running tests](https://facebook.github.io/create-react-app/docs/running-tests)
-for more information.
+1. `npm install` or `yarn` (if you use yarn)
+2. `npm run start` or `yarn start` (if you use yarn)
 
-### `npm run build`
+After you start the project. It will automatically open on port **3000**.<br/>
+You can open it by linking to url `http://localhost:3000` 
 
-Builds the app for production to the `build` folder.<br /> It correctly bundles
-React in production mode and optimizes the build for the best performance.
+# Testing
+This runs a range of unit tests in the repo by react testing library.
 
-The build is minified and the filenames include the hashes.<br /> Your app is
-ready to be deployed!
+> `npm run test` or `yarn test`
 
-See the section about
-[deployment](https://facebook.github.io/create-react-app/docs/deployment) for
-more information.
+# Architecture
+I will listing the core modules I using in this repo and the reason of why I chose it
 
-### `npm run eject`
+## Create React App
+Since Create React App (CRA) has a big update from version 4 to 5.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+I would like to see what is different between the two versions and how it improves the development experience
 
-If you aren’t satisfied with the build tool and configuration choices, you can
-`eject` at any time. This command will remove the single build dependency from
-your project.
+## Chakra UI
+I had developed project by using Ant-design and Material-UI. 
 
-Instead, it will copy all the configuration files and the transitive
-dependencies (webpack, Babel, ESLint, etc) right into your project so you have
-full control over them. All of the commands except `eject` will still work, but
-they will point to the copied scripts so you can tweak them. At this point
-you’re on your own.
+But never try Chakra-UI before. 
 
-You don’t have to ever use `eject`. The curated feature set is suitable for
-small and middle deployments, and you shouldn’t feel obligated to use this
-feature. However we understand that this tool wouldn’t be useful if you couldn’t
-customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the
-[Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+So I chose it for this repo's ui library
