@@ -25,7 +25,7 @@ You can open it by linking to url `http://localhost:3000`
 # Testing
 This runs a range of unit tests in the repo by react testing library.
 
-> `npm run test` or `yarn test`
+`npm run test` or `yarn test` (if you use yarn)
 
 # Architecture
 I will listing the core modules I using in this repo and the reason of why I chose it
