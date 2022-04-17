@@ -4,7 +4,7 @@ import { Box, ChakraProvider, theme } from "@chakra-ui/react";
 
 import { getAuthHeader } from "@Api/index";
 
-import Article from "@Pages/article/Article";
+import Article from "@Pages/Article/Article";
 import Category from "@Pages/Category/Category";
 import Account from "@Pages/ChangePassword";
 import Login from "@Pages/Login";
