@@ -1,6 +1,8 @@
-import { useEffect, useMemo, useRef } from "react"
-import { FieldValues, useForm, UseFormSetValue } from "react-hook-form"
-import ReactQuill from "react-quill"
+import { useEffect, useMemo, useRef } from "react";
+import { FieldValues, useForm, UseFormSetValue } from "react-hook-form";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import "./modalTemplate.css";
 
 import {
   FormControl,
@@ -8,19 +10,17 @@ import {
   FormLabel,
   Input,
   Select,
-  useColorModeValue,
-} from "@chakra-ui/react"
-import dayjs from "dayjs"
+  useColorModeValue
+} from "@chakra-ui/react";
+import dayjs from "dayjs";
 
-import { patchArticle, postArticle } from "@Api/index"
+import { patchArticle, postArticle } from "@Api/index";
 
-import FileUpload from "@Components/FileUpload"
-import Modal from "@Components/Modal"
+import FileUpload from "@Components/FileUpload";
+import Modal from "@Components/Modal";
 
-import convertImageToBase64 from "@Utils/convertImageToBase64"
+import convertImageToBase64 from "@Utils/convertImageToBase64";
 
-import "react-quill/dist/quill.snow.css"
-import "./modalTemplate.css"
 interface ModalTemplateProps {
   isOpen: boolean
   onClose: () => void
@@ -48,14 +48,14 @@ const ModalTemplate = ({
     setValue,
   } = useForm({})
 
-  const quillValue = useRef('')
+  const quillRef = useRef<ReactQuill>(null)
   
   const watchPreviewImg = watch("previewImg", [])
   const watchContent = watch("content", [])
 
   const isPreviewImgObject = typeof watchPreviewImg === "object"
   const isEdit = !!editData.id
-  const fields: Omit<FormFieldProps, "errors" | "quillValue">[] = useMemo(
+  const fields: Omit<FormFieldProps, "errors" | "quillRef">[] = useMemo(
     () => [
       {
         title: "Title",
@@ -143,8 +143,6 @@ const ModalTemplate = ({
 
   useEffect(() => {
     Object.entries(editData).forEach(([key, val]) => {
-      if (key === "content") quillValue.current = val as string
-
       if (key === "releaseTime") setValue(key, dayjs(val).format("YYYY-MM-DD"))
       else setValue(key, val)
     })
@@ -155,12 +153,11 @@ const ModalTemplate = ({
       isOpen={isOpen}
       onClose={() => {
         onClose()
-        quillValue.current = ''
         reset({})
       }}
       title={`${isEdit ? "Edit" : "Create"} Article`}
       submitText={isEdit ? "Edit" : "Create"}
-      handleSubmitButtonClick={ ()=> setValue('content', quillValue.current)}
+      handleSubmitButtonClick={ ()=> setValue('content', quillRef.current)}
       onSubmit={handleSubmit(async val => {
         if (isEdit) {
           // edit
@@ -185,7 +182,6 @@ const ModalTemplate = ({
         }
 
         onClose()
-        quillValue.current = ''
         reset({})
       })}
     >
@@ -199,7 +195,7 @@ const ModalTemplate = ({
         <FormField
           key={field.value}
           errors={errors}
-          quillValue={quillValue}
+          quillRef={quillRef}
           {...field}
         />
       ))}
@@ -214,7 +210,7 @@ interface FormFieldProps {
   detail: any
   type: "text" | "number" | "date" | "select" | "textarea"
   placeholder: string
-  quillValue: React.MutableRefObject<string>
+  quillRef: React.LegacyRef<ReactQuill>
   options?: { name: string; value: string | number }[]
   defaultValue?: string
 }
@@ -226,7 +222,7 @@ const FormField = ({
   detail,
   type,
   placeholder,
-  quillValue,
+  quillRef,
   options = [],
   defaultValue,
 }: FormFieldProps) => {
@@ -249,6 +245,7 @@ const FormField = ({
         return (
           <div>
             <ReactQuill
+              ref={quillRef}
               className="quill-wrapper"
               defaultValue={defaultValue}
               modules={{
@@ -286,7 +283,6 @@ const FormField = ({
                 "image",
                 "video",
               ]}
-              onChange={val => quillValue.current = val}
             />
           </div>
         )
