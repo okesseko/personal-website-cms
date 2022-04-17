@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react"
+import { useEffect, useMemo, useRef } from "react"
 import { FieldValues, useForm, UseFormSetValue } from "react-hook-form"
 import ReactQuill from "react-quill"
 
@@ -48,12 +48,14 @@ const ModalTemplate = ({
     setValue,
   } = useForm({})
 
+  const quillValue = useRef('')
+  
   const watchPreviewImg = watch("previewImg", [])
   const watchContent = watch("content", [])
 
   const isPreviewImgObject = typeof watchPreviewImg === "object"
   const isEdit = !!editData.id
-  const fields: Omit<FormFieldProps, "errors" | "setValue">[] = useMemo(
+  const fields: Omit<FormFieldProps, "errors" | "quillValue">[] = useMemo(
     () => [
       {
         title: "Title",
@@ -141,6 +143,8 @@ const ModalTemplate = ({
 
   useEffect(() => {
     Object.entries(editData).forEach(([key, val]) => {
+      if (key === "content") quillValue.current = val as string
+
       if (key === "releaseTime") setValue(key, dayjs(val).format("YYYY-MM-DD"))
       else setValue(key, val)
     })
@@ -151,12 +155,13 @@ const ModalTemplate = ({
       isOpen={isOpen}
       onClose={() => {
         onClose()
+        quillValue.current = ''
         reset({})
       }}
       title={`${isEdit ? "Edit" : "Create"} Article`}
       submitText={isEdit ? "Edit" : "Create"}
+      handleSubmitButtonClick={ ()=> setValue('content', quillValue.current)}
       onSubmit={handleSubmit(async val => {
-        console.log(val)
         if (isEdit) {
           // edit
           const base64Image = isPreviewImgObject
@@ -180,6 +185,7 @@ const ModalTemplate = ({
         }
 
         onClose()
+        quillValue.current = ''
         reset({})
       })}
     >
@@ -193,7 +199,7 @@ const ModalTemplate = ({
         <FormField
           key={field.value}
           errors={errors}
-          setValue={setValue}
+          quillValue={quillValue}
           {...field}
         />
       ))}
@@ -208,7 +214,7 @@ interface FormFieldProps {
   detail: any
   type: "text" | "number" | "date" | "select" | "textarea"
   placeholder: string
-  setValue?: UseFormSetValue<FieldValues>
+  quillValue: React.MutableRefObject<string>
   options?: { name: string; value: string | number }[]
   defaultValue?: string
 }
@@ -220,7 +226,7 @@ const FormField = ({
   detail,
   type,
   placeholder,
-  setValue = () => {},
+  quillValue,
   options = [],
   defaultValue,
 }: FormFieldProps) => {
@@ -240,7 +246,6 @@ const FormField = ({
           />
         )
       case "textarea":
-        let filterTimeout: NodeJS.Timeout
         return (
           <div>
             <ReactQuill
@@ -281,12 +286,7 @@ const FormField = ({
                 "image",
                 "video",
               ]}
-              onChange={e => {
-                clearTimeout(filterTimeout)
-                filterTimeout = setTimeout(() => {
-                  setValue(value, e)
-                }, 500)
-              }}
+              onChange={val => quillValue.current = val}
             />
           </div>
         )

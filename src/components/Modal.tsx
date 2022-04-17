@@ -19,6 +19,7 @@ interface ModalProps {
   submitText?: string
   children: ReactNode
   onSubmit: (val: any) => void
+  handleSubmitButtonClick?: () => void
   size?:
     | "4xl"
     | "xs"
@@ -41,6 +42,7 @@ const Modal = ({
   children,
   onSubmit,
   size = "4xl",
+  handleSubmitButtonClick = () => { },
 }: ModalProps) => {
   return (
     <ModalChakra isOpen={isOpen} onClose={onClose} size={size}>
@@ -53,7 +55,7 @@ const Modal = ({
             <VStack spacing={4}>{children}</VStack>
           </ModalBody>
           <ModalFooter>
-            <Button type="submit" colorScheme="blue" mr={3}>
+            <Button type="submit" colorScheme="blue" mr={3} onClick={handleSubmitButtonClick}>
               {submitText}
             </Button>
             <Button type="reset" variant="ghost" onClick={onClose}>
