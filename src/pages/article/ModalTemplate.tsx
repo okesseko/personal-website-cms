@@ -48,8 +48,8 @@ const ModalTemplate = ({
     setValue,
   } = useForm({})
 
-  const quillRef = useRef<ReactQuill>(null)
-  
+  const quillRef = useRef<any>(null)
+
   const watchPreviewImg = watch("previewImg", [])
   const watchContent = watch("content", [])
 
@@ -157,8 +157,19 @@ const ModalTemplate = ({
       }}
       title={`${isEdit ? "Edit" : "Create"} Article`}
       submitText={isEdit ? "Edit" : "Create"}
-      handleSubmitButtonClick={ ()=> setValue('content', quillRef.current)}
+      handleSubmitButtonClick={() => {
+        if (quillRef.current) {
+          const editor = quillRef.current.getEditor()
+          const privilegedEditor =
+            quillRef.current.makeUnprivilegedEditor(editor)
+
+          setValue("content", privilegedEditor.getHTML())
+          setValue("intro", privilegedEditor.getText())
+        }
+      }}
       onSubmit={handleSubmit(async val => {
+        console.log(val)
+
         if (isEdit) {
           // edit
           const base64Image = isPreviewImgObject
@@ -210,7 +221,7 @@ interface FormFieldProps {
   detail: any
   type: "text" | "number" | "date" | "select" | "textarea"
   placeholder: string
-  quillRef: React.LegacyRef<ReactQuill>
+  quillRef: any
   options?: { name: string; value: string | number }[]
   defaultValue?: string
 }
