@@ -1,7 +1,11 @@
 import axios from "axios"
 
+
 const defaultRequest = axios.create({
-  baseURL: "http://localhost:9000",
+  baseURL:
+    process.env.NODE_ENV !== "production"
+      ? "http://localhost:9000"
+      : process.env.REACT_APP_API_URL,
   headers: {
     "Access-Control-Allow-Origin": "*",
   },
