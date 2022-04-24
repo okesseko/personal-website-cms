@@ -128,9 +128,6 @@ const ModalTemplate = ({
   }
 
   const validateFiles = (value: FileList) => {
-    if (value.length < 1) {
-      return "Files is required"
-    }
     for (const file of Array.from(value)) {
       const fsMb = file.size / (1024 * 1024)
       const MAX_FILE_SIZE = 10

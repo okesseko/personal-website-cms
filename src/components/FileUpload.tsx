@@ -37,7 +37,7 @@ const FileUpload = ({
   const handleClick = () => inputRef.current?.click()
 
   return (
-    <FormControl isInvalid={errors.previewImg} isRequired>
+    <FormControl isInvalid={errors.previewImg} >
       <FormLabel>{"File input"}</FormLabel>
       <InputGroup onClick={handleClick}>
         <input
