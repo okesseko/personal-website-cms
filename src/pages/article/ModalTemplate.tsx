@@ -128,6 +128,7 @@ const ModalTemplate = ({
   }
 
   const validateFiles = (value: FileList) => {
+    console.log(value)
     for (const file of Array.from(value)) {
       const fsMb = file.size / (1024 * 1024)
       const MAX_FILE_SIZE = 10
@@ -169,9 +170,16 @@ const ModalTemplate = ({
 
         if (isEdit) {
           // edit
-          const base64Image = isPreviewImgObject
-            ? await convertImageToBase64(val.previewImg[0]).then(data => data)
-            : val.previewImg
+          let base64Image
+
+          if (isPreviewImgObject) {
+            if (val.previewImg[0])
+              base64Image = await convertImageToBase64(val.previewImg[0]).then(
+                data => data
+              )
+          } else {
+            base64Image = val.previewImg
+          }
 
           patchArticle(editData.id, {
             ...val,
@@ -179,9 +187,11 @@ const ModalTemplate = ({
           }).then(() => refetchData())
         } else {
           // create
-          const base64Image = await convertImageToBase64(
-            val.previewImg[0]
-          ).then(data => data)
+          let base64Image
+          if (val.previewImg[0])
+            base64Image = await convertImageToBase64(val.previewImg[0]).then(
+              data => data
+            )
 
           postArticle({
             ...val,

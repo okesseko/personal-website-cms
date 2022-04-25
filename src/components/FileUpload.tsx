@@ -1,7 +1,7 @@
-import { useRef } from "react"
-import { UseFormRegisterReturn } from "react-hook-form"
-import { FiFile } from "react-icons/fi"
-import { MdOutlineDeleteOutline } from "react-icons/md"
+import { useRef } from "react";
+import { UseFormRegisterReturn } from "react-hook-form";
+import { FiFile } from "react-icons/fi";
+import { MdOutlineDeleteOutline } from "react-icons/md";
 
 import {
   Button,
@@ -11,10 +11,11 @@ import {
   Image,
   InputGroup,
   Text,
-  VStack,
-} from "@chakra-ui/react"
+  VStack
+} from "@chakra-ui/react";
 
 interface FileUploadProps {
+  required?: boolean
   register: UseFormRegisterReturn
   errors: {
     [x: string]: any
@@ -24,6 +25,7 @@ interface FileUploadProps {
 }
 
 const FileUpload = ({
+  required,
   register,
   errors,
   uploadFile,
@@ -37,7 +39,7 @@ const FileUpload = ({
   const handleClick = () => inputRef.current?.click()
 
   return (
-    <FormControl isInvalid={errors.previewImg} >
+    <FormControl isInvalid={errors.previewImg} isRequired={required}>
       <FormLabel>{"File input"}</FormLabel>
       <InputGroup onClick={handleClick}>
         <input

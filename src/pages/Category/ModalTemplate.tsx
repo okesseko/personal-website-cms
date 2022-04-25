@@ -1,20 +1,20 @@
-import { useEffect } from "react"
-import { useForm } from "react-hook-form"
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 
 import {
   FormControl,
   FormErrorMessage,
   FormLabel,
   Input,
-  useColorModeValue,
-} from "@chakra-ui/react"
+  useColorModeValue
+} from "@chakra-ui/react";
 
-import { patchCategory, postCategory } from "@Api/index"
+import { patchCategory, postCategory } from "@Api/index";
 
-import FileUpload from "@Components/FileUpload"
-import Modal from "@Components/Modal"
+import FileUpload from "@Components/FileUpload";
+import Modal from "@Components/Modal";
 
-import convertImageToBase64 from "@Utils/convertImageToBase64"
+import convertImageToBase64 from "@Utils/convertImageToBase64";
 
 interface ModalTemplateProps {
   isOpen: boolean
@@ -110,6 +110,7 @@ const ModalTemplate = ({
       })}
     >
       <FileUpload
+        required
         errors={errors}
         register={register("image", { validate: validateFiles })}
         uploadFile={uploadImageUrl()}
